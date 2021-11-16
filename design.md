@@ -7,18 +7,22 @@
 -   `NewsPlugin`
     -   Fetches a list News Articles of a country that were published within a period of time with News API
 
-The fragment sends a list of `text` along with `time_stamp` and a `locate_at` data input to the visualization plugins, which could present the following features:
+The framework sends a list of `text` along with `time_stamp` and a `locate_at` data input to the `Visualization Plugins`, which could present the following features:
 
 -   Bar charts showing the magnitude of positive`Trends/Events` over time
 -   Pie Charts displaying the relative number of postive and negative `Trends/Events` within a period of time
+
+The framework processes data from the above fields and analyze the text sentiment from the given `text` fields in `core`, providing statuses to the `gui` for rendering.
 
 ### Project Structure
 
 ```java
 /framework
-    /models
+    /core
         /FrameWork.java
         /AnalyzeSentiment.java
+    /gui
+        /Status.java
     /plugins
         /Plugin.java
 /plugin
