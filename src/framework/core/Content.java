@@ -7,7 +7,7 @@ public class Content {
     private Date timeStamp;
     private Float score;
 
-    public Content(String text, Date timeStamp, String location) {
+    public Content(String text, Date timeStamp) {
         this.text = text;
         this.timeStamp = timeStamp;
         this.score = 0f;

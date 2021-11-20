@@ -50,7 +50,7 @@ public class NewsPlugin implements DataPlugin {
     private void collectContentData(ArticleResponse response) throws ParseException {
         for(Article a: response.getArticles()) {
             Date publishedAt =new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss'Z'").parse(a.getPublishedAt());
-            articles.add(new Content(a.getDescription(), publishedAt, ""));
+            articles.add(new Content(a.getDescription(), publishedAt));
         }
     }
 

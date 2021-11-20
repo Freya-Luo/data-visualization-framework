@@ -27,5 +27,5 @@ dependencies {
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
     implementation platform('com.google.cloud:libraries-bom:24.0.0')
     implementation 'com.google.cloud:google-cloud-language'
-    implementation 'org.twitter4j:twitter4j-core:4.0.6'
+    implementation 'org.twitter4j:twitter4j-core:4.0.7'
 }
