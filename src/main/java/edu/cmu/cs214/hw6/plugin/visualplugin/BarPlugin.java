@@ -1,13 +1,13 @@
-package plugin.visualplugin.pieplugin;
+package main.java.edu.cmu.cs214.hw6.plugin.visualplugin;
 
-import framework.core.Content;
-import framework.gui.VisualPlugin;
+import main.java.edu.cmu.cs214.hw6.framework.core.Content;
+import main.java.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
 
 import java.util.Date;
 import java.util.List;
 
-public class PiePlugin implements VisualPlugin {
-    private final String name = "pie chart";
+public class BarPlugin implements VisualPlugin {
+    private final String name = "bar chart";
     private List<Content> contents;
     private List<Date> timeStamps;
     private List<Float> scores;

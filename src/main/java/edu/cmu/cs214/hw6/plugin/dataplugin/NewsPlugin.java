@@ -1,11 +1,11 @@
-package plugin.dataplugin.NewsPlugin;
+package main.java.edu.cmu.cs214.hw6.plugin.dataplugin;
 
 import com.kwabenaberko.newsapilib.NewsApiClient;
 import com.kwabenaberko.newsapilib.models.Article;
 import com.kwabenaberko.newsapilib.models.request.EverythingRequest;
 import com.kwabenaberko.newsapilib.models.response.ArticleResponse;
-import framework.core.Content;
-import framework.core.DataPlugin;
+import main.java.edu.cmu.cs214.hw6.framework.core.Content;
+import main.java.edu.cmu.cs214.hw6.framework.core.DataPlugin;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

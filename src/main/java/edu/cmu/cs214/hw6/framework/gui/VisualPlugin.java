@@ -1,7 +1,7 @@
-package framework.gui;
+package main.java.edu.cmu.cs214.hw6.framework.gui;
 
 
-import framework.core.Content;
+import main.java.edu.cmu.cs214.hw6.framework.core.Content;
 
 import java.util.Date;
 import java.util.List;

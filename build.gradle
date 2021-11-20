@@ -2,10 +2,6 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
-
-
 allprojects {
     repositories {
         mavenCentral()
@@ -28,4 +24,5 @@ dependencies {
     implementation platform('com.google.cloud:libraries-bom:24.0.0')
     implementation 'com.google.cloud:google-cloud-language'
     implementation 'org.twitter4j:twitter4j-core:4.0.7'
+    implementation group: 'com.github.jknack', name: 'handlebars', version: '4.0.5'
 }

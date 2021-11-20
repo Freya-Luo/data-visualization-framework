@@ -1,7 +1,7 @@
-package plugin.dataplugin.TwitterPlugin;
+package main.java.edu.cmu.cs214.hw6.plugin.dataplugin;
 
-import framework.core.Content;
-import framework.core.DataPlugin;
+import main.java.edu.cmu.cs214.hw6.framework.core.Content;
+import main.java.edu.cmu.cs214.hw6.framework.core.DataPlugin;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;

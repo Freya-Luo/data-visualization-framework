@@ -1,31 +1,16 @@
-package framework.core;
-import com.google.cloud.language.v1.AnalyzeEntitiesRequest;
-import com.google.cloud.language.v1.AnalyzeEntitiesResponse;
-import com.google.cloud.language.v1.AnalyzeEntitySentimentRequest;
-import com.google.cloud.language.v1.AnalyzeEntitySentimentResponse;
+package main.java.edu.cmu.cs214.hw6.framework.core;
 import com.google.cloud.language.v1.AnalyzeSentimentResponse;
-import com.google.cloud.language.v1.AnalyzeSyntaxRequest;
-import com.google.cloud.language.v1.AnalyzeSyntaxResponse;
-import com.google.cloud.language.v1.ClassificationCategory;
-import com.google.cloud.language.v1.ClassifyTextRequest;
-import com.google.cloud.language.v1.ClassifyTextResponse;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.Document.Type;
-import com.google.cloud.language.v1.EncodingType;
-import com.google.cloud.language.v1.Entity;
-import com.google.cloud.language.v1.EntityMention;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
-import com.google.cloud.language.v1.Token;
-import framework.gui.VisualPlugin;
+import main.java.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-public class AnalyzeSentiment implements Framework{
+public class FrameworkImpl implements Framework{
     private LanguageServiceClient language;
     private List<Content> contents;
     private List<DataPlugin> dataPlugins;
@@ -33,11 +18,8 @@ public class AnalyzeSentiment implements Framework{
     private DataPlugin currentDataPlugin;
     private List<VisualPlugin> currentVisualPlugins;
 
-    public AnalyzeSentiment(List<Content> initialContents) throws IOException {
+    public FrameworkImpl() throws IOException {
         language = LanguageServiceClient.create();
-        this.contents = new ArrayList<>();
-        this.contents.addAll(initialContents);
-
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
     }
