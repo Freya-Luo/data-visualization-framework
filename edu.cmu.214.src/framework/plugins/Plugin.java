@@ -1,4 +1,5 @@
 package framework.plugins;
 
-public class Plugin {
+public interface Plugin {
+    public String getPluginName();
 }

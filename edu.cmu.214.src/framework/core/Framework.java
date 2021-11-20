@@ -1,4 +1,5 @@
 package framework.core;
 
-public class Framework {
+public interface Framework {
+    public void analyze() throws Exception;
 }
