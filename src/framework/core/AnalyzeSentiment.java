@@ -17,29 +17,59 @@ import com.google.cloud.language.v1.EntityMention;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import com.google.cloud.language.v1.Token;
+import framework.gui.VisualPlugin;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class AnalyzeSentiment implements Framework{
-    LanguageServiceClient language;
-    List<Content> Contents;
+    private LanguageServiceClient language;
+    private List<Content> contents;
+    private List<DataPlugin> dataPlugins;
+    private List<VisualPlugin> visualPlugins;
+    private DataPlugin currentDataPlugin;
+    private List<VisualPlugin> currentVisualPlugins;
 
-    public AnalyzeSentiment(List<Content> initialContents) {
+    public AnalyzeSentiment(List<Content> initialContents) throws IOException {
         language = LanguageServiceClient.create();
-        this.Contents = new ArrayList<>();
-        this.Contents.addAll(initialContents);
+        this.contents = new ArrayList<>();
+        this.contents.addAll(initialContents);
+
+        this.dataPlugins = new ArrayList<>();
+        this.visualPlugins = new ArrayList<>();
     }
 
-    @Override
-    public void analyze() throws Exception {
-        for (Content c: this.Contents) {
-            Sentiment res = analyzeSentimentText(c.getText());
-            c.setScore(res.getScore());
+    public void registerDataPlugins(DataPlugin dataPlugins) {
+        this.dataPlugins.add(dataPlugins);
+    }
+
+    public void registerVisualPlugins(List<VisualPlugin> visualPlugins) {
+        this.visualPlugins.addAll(visualPlugins);
+    }
+
+    public void init(DataPlugin dp, List<VisualPlugin> vps) {
+        if (currentDataPlugin != dp) {
+            currentDataPlugin = dp;
         }
-        System.out.println("Done.");
+        this.contents = dp.getContents();
+
+        currentVisualPlugins.clear();
+        currentVisualPlugins.addAll(vps);
+    }
+
+    public void analyze() {
+        try {
+            for (Content c : this.contents) {
+                Sentiment res = analyzeSentimentText(c.getText());
+                c.setScore(res.getScore());
+            }
+            System.out.println("Done.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Sentiment analyzeSentimentText(String text) throws Exception {
@@ -57,4 +87,7 @@ public class AnalyzeSentiment implements Framework{
         return sentiment;
     }
 
+    public List<Content> getData() {
+        return this.contents;
+    }
 }

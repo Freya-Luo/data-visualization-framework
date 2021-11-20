@@ -1,7 +1,7 @@
 package plugin.dataplugin.TwitterPlugin;
 
 import framework.core.Content;
-import plugin.dataplugin.DataPlugin;
+import framework.core.DataPlugin;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -11,10 +11,7 @@ import twitter4j.DirectMessageList;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TwitterPlugin implements DataPlugin {
     private static final String dataPluginName = "Twitter";
@@ -28,20 +25,23 @@ public class TwitterPlugin implements DataPlugin {
     public TwitterPlugin() {
         this.pluginData = new ArrayList<>();
     }
-    @Override
+
     public String getPluginName() {
         return this.dataPluginName;
     }
-    @Override
-    public void setup(Map<String, String> paramsMap) throws ParseException {
+
+    public void setup(Map<String, String> paramsMap) {
         this.userName = paramsMap.get("userName");
         this.dataNumber = Integer.parseInt(paramsMap.get("dataNumber"));
         SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
-        this.from = format.parse(paramsMap.get("from"));
-        this.to = format.parse(paramsMap.get("to"));
+        try {
+            this.from = format.parse(paramsMap.get("from"));
+            this.to = format.parse(paramsMap.get("to"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
     public void getDataFromParams() {
         Twitter twitter = new TwitterFactory().getInstance();
         try {
@@ -59,18 +59,19 @@ public class TwitterPlugin implements DataPlugin {
                 cursor = messages.getNextCursor();
             } while (messages.size() > 0 && cursor != null);
             System.out.println("done.");
+            // convert to Content type and filter the time period
+            for (DirectMessage message : messages) {
+                Date timeStamp = message.getCreatedAt();
+                if (timeStamp.after(this.from) && timeStamp.before((this.to))) {
+                    this.pluginData.add(toContent(message));
+                }
+            }
         } catch (TwitterException te) {
             te.printStackTrace();
             System.out.println("Failed to get messages: " + te.getMessage());
             //System.exit(-1);
         }
-        // convert to Content type and filter the time period
-        for (DirectMessage message : messages) {
-            Date timeStamp = message.getCreatedAt();
-            if (timeStamp.after(this.from) && timeStamp.before((this.to))) {
-                this.pluginData.add(toContent(message));
-            }
-        }
+
     }
 
     public Content toContent(DirectMessage message) {
@@ -78,12 +79,7 @@ public class TwitterPlugin implements DataPlugin {
         return c;
     }
     @Override
-    public void parseData() {
-        //
-        return;
-    }
-
-    public List<Content> getPluginData() {
+    public List<Content> getContents() {
         return pluginData;
     }
 }

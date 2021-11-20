@@ -1,15 +1,17 @@
+package plugin.visualplugin.barplugin;
+
 import framework.core.Content;
 import framework.gui.VisualPlugin;
 
 import java.util.Date;
 import java.util.List;
 
-public class PiePlugin implements VisualPlugin {
+public class BarPlugin implements VisualPlugin {
+    private final String name = "bar chart";
     private List<Content> contents;
     private List<Date> timeStamps;
     private List<Float> scores;
 
-    @Override
     public void setContents(List<Content> contents) {
         this.contents = contents;
     }
@@ -22,15 +24,15 @@ public class PiePlugin implements VisualPlugin {
     }
 
     public List<Date> getTimeStamps(){
-
+        return timeStamps;
     }
 
     public List<Float> getScores(){
-
+        return scores;
     }
 
 
     public String getPluginName() {
-        return "";
+        return name;
     }
 }
