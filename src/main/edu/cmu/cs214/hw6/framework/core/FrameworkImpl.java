@@ -1,10 +1,10 @@
-package main.java.edu.cmu.cs214.hw6.framework.core;
+package main.edu.cmu.cs214.hw6.framework.core;
 import com.google.cloud.language.v1.AnalyzeSentimentResponse;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
-import main.java.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
+import main.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
 
 import java.io.IOException;
 import java.util.ArrayList;

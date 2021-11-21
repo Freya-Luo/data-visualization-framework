@@ -1,5 +1,4 @@
-package main.java.edu.cmu.cs214.hw6.framework.core;
-
+package main.edu.cmu.cs214.hw6.framework.core;
 
 import java.util.List;
 import java.util.Map;

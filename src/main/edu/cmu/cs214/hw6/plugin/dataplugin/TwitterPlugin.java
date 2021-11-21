@@ -1,7 +1,7 @@
-package main.java.edu.cmu.cs214.hw6.plugin.dataplugin;
+package main.edu.cmu.cs214.hw6.plugin.dataplugin;
 
-import main.java.edu.cmu.cs214.hw6.framework.core.Content;
-import main.java.edu.cmu.cs214.hw6.framework.core.DataPlugin;
+import main.edu.cmu.cs214.hw6.framework.core.Content;
+import main.edu.cmu.cs214.hw6.framework.core.DataPlugin;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;

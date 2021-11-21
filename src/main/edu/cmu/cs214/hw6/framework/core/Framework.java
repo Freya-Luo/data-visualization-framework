@@ -1,6 +1,6 @@
-package main.java.edu.cmu.cs214.hw6.framework.core;
+package main.edu.cmu.cs214.hw6.framework.core;
 
-import main.java.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
+import main.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
 
 import java.util.List;
 

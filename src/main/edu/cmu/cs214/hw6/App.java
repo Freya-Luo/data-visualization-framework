@@ -1,12 +1,11 @@
-package main.java.edu.cmu.cs214.hw6;
+package main.edu.cmu.cs214.hw6;
 
-import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import fi.iki.elonen.NanoHTTPD;
 
-import main.java.edu.cmu.cs214.hw6.framework.core.DataPlugin;
-import main.java.edu.cmu.cs214.hw6.framework.core.FrameworkImpl;
-import main.java.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
+import main.edu.cmu.cs214.hw6.framework.core.DataPlugin;
+import main.edu.cmu.cs214.hw6.framework.core.FrameworkImpl;
+import main.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
