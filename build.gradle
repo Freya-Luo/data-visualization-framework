@@ -14,11 +14,6 @@ sourceSets {
         java {
             srcDirs = ['src']
         }
-        resources {
-            srcDir 'src'
-            include '**/*.xml'
-            include 'META-INF/services/**'
-        }
     }
 }
 dependencies {

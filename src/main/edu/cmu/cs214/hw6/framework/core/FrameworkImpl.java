@@ -4,10 +4,12 @@ import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class FrameworkImpl implements Framework{
     private LanguageServiceClient language;
@@ -23,6 +25,7 @@ public class FrameworkImpl implements Framework{
         language = LanguageServiceClient.create();
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
+        this.currentVisualPlugins = new ArrayList<>();
     }
 
     public void registerDataPlugins(List<DataPlugin> dataPlugins) {
@@ -41,10 +44,18 @@ public class FrameworkImpl implements Framework{
         if (currentDataPlugin != dp) {
             currentDataPlugin = dp;
         }
-        this.contents = dp.getContents();
-
         currentVisualPlugins.clear();
         currentVisualPlugins.addAll(vps);
+    }
+
+    public void getParams(Map<String, String> paramsMap) {
+        currentDataPlugin.setup(paramsMap);
+        currentDataPlugin.getDataFromParams();
+        this.contents = currentDataPlugin.getContents();
+
+        for(VisualPlugin vp : currentVisualPlugins) {
+            vp.setContents(this.contents);
+        }
     }
 
     public void analyze() {
