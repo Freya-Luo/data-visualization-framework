@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class NewsPlugin implements DataPlugin {
     private final String name = "News";
@@ -50,13 +52,14 @@ public class NewsPlugin implements DataPlugin {
             articles.add(new Content(a.getDescription(), publishedAt));
         }
 
-        for(Content c: articles) {
-            System.out.println(c.getText());
-        }
+//        for(Content c: articles) {
+//            System.out.println(c.getText());
+//        }
     }
 
 
     public void getDataFromParams(){
+        CountDownLatch countDownLatch = new CountDownLatch(1);
         newsApiClient.getEverything(
                 buildQuery(),
                 new NewsApiClient.ArticlesResponseCallback() {
@@ -64,6 +67,7 @@ public class NewsPlugin implements DataPlugin {
                     public void onSuccess(ArticleResponse response) {
                         try{
                             collectContentData(response);
+                            countDownLatch.countDown();
                         }catch (ParseException p) {
                             p.printStackTrace();
                         }
@@ -75,6 +79,12 @@ public class NewsPlugin implements DataPlugin {
                     }
                 }
         );
+        try {
+            countDownLatch.await(1L, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String getPluginName() {

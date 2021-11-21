@@ -5,6 +5,7 @@ import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import com.github.jknack.handlebars.Template;
 import fi.iki.elonen.NanoHTTPD;
 
+import main.edu.cmu.cs214.hw6.framework.core.Content;
 import main.edu.cmu.cs214.hw6.framework.core.DataPlugin;
 import main.edu.cmu.cs214.hw6.framework.core.FrameworkImpl;
 import main.edu.cmu.cs214.hw6.framework.gui.State;
@@ -12,6 +13,7 @@ import main.edu.cmu.cs214.hw6.framework.core.VisualPlugin;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,12 +62,14 @@ public class App extends NanoHTTPD {
             if (uri.equals("/plugin")) {
                 this.framework.init(dataPlugins.get(Integer.parseInt(params.get("i"))), visualPlugins);
             } else if (uri.equals("/getparams")){
-                this.framework.getParams(params);
+                this.framework.fetchData(params);
                 if (this.framework.hasDataPlugin()) {
-                    // TODO: Possible Async Call....
                     this.framework.analyze();
+                    List<Content> cs =this.framework.setVisualData();
+                    System.out.println(cs.size() + "ll");
                 }
             }
+
             // Extract the view-specific data from the game and apply it to the template.
             State frameworkState = State.forFramework(this.framework);
             String HTML = this.template.apply(frameworkState);

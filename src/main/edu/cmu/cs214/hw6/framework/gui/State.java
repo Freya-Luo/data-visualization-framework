@@ -66,6 +66,7 @@ public class State {
     }
 
     public Float[] getScores() {
+
         return scores;
     }
 

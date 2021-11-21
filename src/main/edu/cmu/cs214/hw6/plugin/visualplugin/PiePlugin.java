@@ -16,6 +16,10 @@ public class PiePlugin implements VisualPlugin {
 
     public void setContents(List<Content> contents) {
         this.contents = contents;
+        getVisualizedData();
+        for(Float s: scores){
+            System.out.println(s);
+        }
     }
 
     private void getVisualizedData() {
@@ -30,6 +34,7 @@ public class PiePlugin implements VisualPlugin {
     }
 
     public List<Float> getScores(){
+        System.out.println(scores.size() + "llll");
         return scores;
     }
 

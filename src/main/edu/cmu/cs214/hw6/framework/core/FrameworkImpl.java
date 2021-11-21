@@ -52,16 +52,22 @@ public class FrameworkImpl implements Framework{
         this.stage = 1;
     }
 
-    public void getParams(Map<String, String> paramsMap) {
+    public void fetchData(Map<String, String> paramsMap) {
         currentDataPlugin.setup(paramsMap);
         currentDataPlugin.getDataFromParams();
         this.contents = currentDataPlugin.getContents();
+//        System.out.println(this.currentDataPlugin.getPluginName());
+//        System.out.println(this.contents.size());
+    }
 
+    public List<Content> setVisualData() {
         for(VisualPlugin vp : currentVisualPlugins) {
             vp.setContents(this.contents);
         }
-        System.out.println(this.currentDataPlugin.getPluginName());
-        System.out.println(this.contents.size());
+        return this.contents;
+//        System.out.println("1");
+//        for(Content c: this.contents)
+//            System.out.println(c.getScore());
     }
 
     public void analyze() {
@@ -73,7 +79,6 @@ public class FrameworkImpl implements Framework{
                 Sentiment res = analyzeSentimentText(c.getText());
                 c.setScore(res.getScore());
             }
-            System.out.println("Done.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,15 +92,12 @@ public class FrameworkImpl implements Framework{
         Sentiment sentiment = response.getDocumentSentiment();
         if (sentiment == null) {
             System.out.println("No sentiment found");
-        } else {
-            System.out.printf("Sentiment magnitude: %.3f\n", sentiment.getMagnitude());
-            System.out.printf("Sentiment score: %.3f\n", sentiment.getScore());
         }
+//        else {
+//            System.out.printf("Sentiment magnitude: %.3f\n", sentiment.getMagnitude());
+//            System.out.printf("Sentiment score: %.3f\n", sentiment.getScore());
+//        }
         return sentiment;
-    }
-
-    public List<Content> getData() {
-        return this.contents;
     }
 
     public String getFrameworkName() {
@@ -129,10 +131,10 @@ public class FrameworkImpl implements Framework{
     }
 
     public Float[] getVisualizedScores() {
-        if (currentVisualPlugins.size() > 0) {
-            List<Float> scores = currentVisualPlugins.get(0).getScores();
-            return scores.toArray(new Float[scores.size()]);
-        }
+//        for(Content c: this.contents) {
+//            System.out.println(c.getScore());
+//        }
+        System.out.println(this.contents);
         return new Float[0];
     }
 

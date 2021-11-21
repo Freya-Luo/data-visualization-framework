@@ -26,26 +26,29 @@
                <input id="time_to" type="date" name="to"/>
 
                {{#eq currentPluginName "News"}}
-                           <!-- News Plugin Rendering Page -->
-                           <form>
-                               <label for="news_sources">Sources:</label>
-                               <select id="news_sources" name="sources">
-                                   <option value="bbc-news">BBC News</option>
-                                   <option value="bloomberg">Bloomberg</option>
-                                   <option value="abc-news">ABC News</option>
-                               </select>
-                            <form>
-                        {{/eq}}
-                        {{#eq currentPluginName "Twitter"}}
-                           <!-- Twitter Plugin Rendering Page -->
-                           <label for="mumber_of_data">Number of data:</label>
-                           <input id="mumber_of_data" type="number" name="dataNumber"/>
-                        {{/eq}}
+                    <!-- News Plugin Rendering Page -->
+                    <form>
+                         <label for="news_sources">Sources:</label>
+                         <select id="news_sources" name="sources">
+                              <option value="bbc-news">BBC News</option>
+                              <option value="bloomberg">Bloomberg</option>
+                              <option value="abc-news">ABC News</option>
+                         </select>
+                    <form>
+                {{/eq}}
+                     {{#eq currentPluginName "Twitter"}}
+                         <!-- Twitter Plugin Rendering Page -->
+                         <label for="mumber_of_data">Number of data:</label>
+                         <input id="mumber_of_data" type="number" name="dataNumber"/>
+                     {{/eq}}
                <button id="form_btn" type="submit">OK</button>
          </form>
 
         <div id="barchart"></div>
         <div id="piechart"></div>
+        {{#each scores}}
+            <input type="hidden" class="score" value="{{this}}"/>
+        {{/each}}
     {{/eq}}
 </body>
 <script type="text/javascript">
@@ -66,7 +69,7 @@ function passParams() {
 }
 
 const dataLabel = "{{ currentPluginName }}"
-const scores = "{{ scores }}"
+const scores = document.getElementsByClassName("score")
 console.log(scores)
 var data = [{
   values: [...scores],
