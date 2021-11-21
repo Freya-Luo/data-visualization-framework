@@ -2,19 +2,101 @@
 <html>
 
 <head>
-  <title>{{name}}</title>
+  <title>Data Visualization Framework</title>
 
   <style>
 
   </style>
+  <script src='https://cdn.plot.ly/plotly-2.6.3.min.js'></script>
 </head>
 
 
 
 <body>
+    <h2>{{name}}<h2>
+    {{#eq stage 0 }}
+        <a href="/plugin?i=0">News</a>
+        <a href="/plugin?i=1">Twitter</a>
+    {{/eq}}
+    {{#eq stage 1 }}
+         <form id="form" onsubmit="passParams()">
+               <label for="time_from">From:</label>
+               <input id="time_from" type="date" name="from"/>
+               <label for="time_to">To:</label>
+               <input id="time_to" type="date" name="to"/>
 
+               {{#eq currentPluginName "News"}}
+                           <!-- News Plugin Rendering Page -->
+                           <form>
+                               <label for="news_sources">Sources:</label>
+                               <select id="news_sources" name="sources">
+                                   <option value="bbc-news">BBC News</option>
+                                   <option value="bloomberg">Bloomberg</option>
+                                   <option value="abc-news">ABC News</option>
+                               </select>
+                            <form>
+                        {{/eq}}
+                        {{#eq currentPluginName "Twitter"}}
+                           <!-- Twitter Plugin Rendering Page -->
+                           <label for="mumber_of_data">Number of data:</label>
+                           <input id="mumber_of_data" type="number" name="dataNumber"/>
+                        {{/eq}}
+               <button id="form_btn" type="submit">OK</button>
+         </form>
+
+        <div id="barchart"></div>
+        <div id="piechart"></div>
+    {{/eq}}
 </body>
 <script type="text/javascript">
+
+function passParams() {
+    let phase = "{{currentPluginName}}";
+    const form = document.getElementById("form")
+    const time_from = document.getElementById("time_from").value
+    const time_to = document.getElementById("time_to").value
+
+    let actionUrl = `/getparams?from=${time_from}&to=${time_to}`
+    if (phase === "News") {
+        actionUrl += "&sources=" + document.getElementById("news_sources").value
+    } else if (phase === "Twitter") {
+        actionUrl += "&dataNumber=" + document.getElementById("mumber_of_data").value
+    }
+    form.action = actionUrl
+}
+
+const dataLabel = "{{ currentPluginName }}"
+const scores = "{{ scores }}"
+console.log(scores)
+var data = [{
+  values: [...scores],
+  labels: ['Very Negative', 'Negative', 'Neutral', 'Positive', 'Very Positive'],
+  domain: {column: 0},
+  hoverinfo: 'label+percent',
+  hole: .4,
+  type: 'pie'
+}];
+
+
+var layout = {
+  title: 'Sentiment Score of Content',
+  annotations: [
+    {
+      font: {
+        size: 20
+      },
+      showarrow: false,
+      text: dataLabel,
+      x: 0.17,
+      y: 0.5
+    }],
+  height: 400,
+  width: 600,
+  showlegend: false,
+  grid: {rows: 1, columns: 2}
+};
+
+Plotly.newPlot('piechart', data, layout);
 
 </script>
 </html>

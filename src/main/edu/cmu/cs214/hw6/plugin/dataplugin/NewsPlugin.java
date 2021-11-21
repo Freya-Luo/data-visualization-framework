@@ -22,20 +22,17 @@ public class NewsPlugin implements DataPlugin {
     private String sources;
     private List<Content> articles;
     private final NewsApiClient newsApiClient;
+    private String msg;
 
     public NewsPlugin() {
         newsApiClient = new NewsApiClient("6ef5b2367fca4b1b863d2060b68d944a");
         articles = new ArrayList<>();
     }
 
-    @Override
     public void setup(Map<String, String> paramsMap) {
         from = paramsMap.get("from");
         to = paramsMap.get("to");
         sources = paramsMap.get("sources");
-//        to = "2021-11-19";
-//        from = "2021-11-19";
-//        sources = "bbc-news";
     }
 
     private EverythingRequest buildQuery() {
@@ -52,9 +49,13 @@ public class NewsPlugin implements DataPlugin {
             Date publishedAt =new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss'Z'").parse(a.getPublishedAt());
             articles.add(new Content(a.getDescription(), publishedAt));
         }
+
+        for(Content c: articles) {
+            System.out.println(c.getText());
+        }
     }
 
-    @Override
+
     public void getDataFromParams(){
         newsApiClient.getEverything(
                 buildQuery(),
@@ -76,14 +77,19 @@ public class NewsPlugin implements DataPlugin {
         );
     }
 
-    @Override
     public String getPluginName() {
         return this.name;
     }
 
-    @Override
     public List<Content> getContents() {
         return articles;
     }
 
+    public void setErrorMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getErrorMsg() {
+        return this.msg;
+    }
 }

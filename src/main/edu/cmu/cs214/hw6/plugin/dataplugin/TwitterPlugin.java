@@ -8,6 +8,7 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.DirectMessage;
 import twitter4j.DirectMessageList;
+import twitter4j.conf.ConfigurationBuilder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ public class TwitterPlugin implements DataPlugin {
     private Date to;
     private List<Content> pluginData;
     private static final int MAX_NUMBER = 30;
+    private String msg;
 
     public TwitterPlugin() {
         this.pluginData = new ArrayList<>();
@@ -31,7 +33,7 @@ public class TwitterPlugin implements DataPlugin {
 
     public void setup(Map<String, String> paramsMap) {
         this.dataNumber = Integer.parseInt(paramsMap.get("dataNumber"));
-        SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         try {
             this.from = format.parse(paramsMap.get("from"));
             this.to = format.parse(paramsMap.get("to"));
@@ -40,8 +42,22 @@ public class TwitterPlugin implements DataPlugin {
         }
     }
 
+    private Twitter getTwitter() {
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+                .setOAuthConsumerKey("")
+                .setOAuthConsumerSecret("")
+                .setOAuthAccessToken("")
+                .setOAuthAccessTokenSecret("");
+
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        return tf.getInstance();
+    }
+
     public void getDataFromParams() {
-        Twitter twitter = new TwitterFactory().getInstance();
+        // oauth for twitter
+        Twitter twitter = getTwitter();
+        //Twitter twitter = new TwitterFactory().getInstance();
         try {
             String cursor = null;
             DirectMessageList messages;
@@ -76,8 +92,16 @@ public class TwitterPlugin implements DataPlugin {
         Content c = new Content(message.getText(), message.getCreatedAt());
         return c;
     }
-    @Override
+
     public List<Content> getContents() {
         return pluginData;
+    }
+
+    public void setErrorMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getErrorMsg() {
+        return this.msg;
     }
 }

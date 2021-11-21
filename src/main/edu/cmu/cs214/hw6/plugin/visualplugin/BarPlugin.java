@@ -3,14 +3,15 @@ package main.edu.cmu.cs214.hw6.plugin.visualplugin;
 import main.edu.cmu.cs214.hw6.framework.core.Content;
 import main.edu.cmu.cs214.hw6.framework.core.VisualPlugin;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class BarPlugin implements VisualPlugin {
     private final String name = "bar chart";
-    private List<Content> contents;
-    private List<Date> timeStamps;
-    private List<Float> scores;
+    private List<Content> contents = new ArrayList<>();
+    private List<Date> timeStamps = new ArrayList<>();
+    private List<Float> scores = new ArrayList<>();
 
     public void setContents(List<Content> contents) {
         this.contents = contents;

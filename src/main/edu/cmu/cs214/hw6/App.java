@@ -1,6 +1,7 @@
 package main.edu.cmu.cs214.hw6;
 
 import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import com.github.jknack.handlebars.Template;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -43,6 +44,7 @@ public class App extends NanoHTTPD {
         this.framework.registerDataPlugins(dataPlugins);
         this.framework.registerVisualPlugins(visualPlugins);
         Handlebars handlebars = new Handlebars();
+        handlebars.registerHelper("eq", ConditionalHelpers.eq);
 
         this.template = handlebars.compile("main");
 
@@ -58,12 +60,9 @@ public class App extends NanoHTTPD {
             if (uri.equals("/plugin")) {
                 this.framework.init(dataPlugins.get(Integer.parseInt(params.get("i"))), visualPlugins);
             } else if (uri.equals("/getparams")){
-                // Fetch needed params for external APIs
-                // TODO....
                 this.framework.getParams(params);
-            }
-            else if (uri.equals("/analyze")){
                 if (this.framework.hasDataPlugin()) {
+                    // TODO: Possible Async Call....
                     this.framework.analyze();
                 }
             }

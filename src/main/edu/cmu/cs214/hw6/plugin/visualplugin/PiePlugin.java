@@ -2,15 +2,17 @@ package main.edu.cmu.cs214.hw6.plugin.visualplugin;
 
 import main.edu.cmu.cs214.hw6.framework.core.Content;
 import main.edu.cmu.cs214.hw6.framework.core.VisualPlugin;
+import org.checkerframework.checker.units.qual.A;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class PiePlugin implements VisualPlugin {
     private final String name = "pie chart";
-    private List<Content> contents;
-    private List<Date> timeStamps;
-    private List<Float> scores;
+    private List<Content> contents = new ArrayList<>();
+    private List<Date> timeStamps = new ArrayList<>();
+    private List<Float> scores = new ArrayList<>();
 
     public void setContents(List<Content> contents) {
         this.contents = contents;

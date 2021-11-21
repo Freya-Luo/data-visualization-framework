@@ -8,4 +8,5 @@ public interface DataPlugin {
     void getDataFromParams();
     String getPluginName();
     List<Content> getContents();
+    String getErrorMsg();
 }

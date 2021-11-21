@@ -24,7 +24,7 @@ dependencies {
     implementation platform('com.google.cloud:libraries-bom:24.0.0')
     implementation 'com.google.cloud:google-cloud-language'
     implementation 'org.twitter4j:twitter4j-core:4.0.7'
-    implementation group: 'com.github.jknack', name: 'handlebars', version: '4.0.5'
+    implementation group: 'com.github.jknack', name: 'handlebars', version: '4.0.7'
     implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
     implementation group: 'com.github.jknack', name: 'handlebars', version: '4.0.6'
 }
