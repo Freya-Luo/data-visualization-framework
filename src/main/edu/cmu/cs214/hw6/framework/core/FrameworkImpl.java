@@ -4,7 +4,6 @@ import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
-import main.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,14 +17,20 @@ public class FrameworkImpl implements Framework{
     private DataPlugin currentDataPlugin;
     private List<VisualPlugin> currentVisualPlugins;
 
+    private final String FRAMEWORK_BASE_NAME = "A Data Visualization Framework";
+
     public FrameworkImpl() throws IOException {
         language = LanguageServiceClient.create();
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
     }
 
-    public void registerDataPlugins(DataPlugin dataPlugins) {
-        this.dataPlugins.add(dataPlugins);
+    public void registerDataPlugins(List<DataPlugin> dataPlugins) {
+        this.dataPlugins.addAll(dataPlugins);
+    }
+
+    public List<DataPlugin> getRegisteredDataPlugins() {
+        return this.dataPlugins;
     }
 
     public void registerVisualPlugins(List<VisualPlugin> visualPlugins) {
@@ -43,6 +48,9 @@ public class FrameworkImpl implements Framework{
     }
 
     public void analyze() {
+        if (this.contents.size() <= 0) {
+            System.out.println("No data to analyze!");
+        }
         try {
             for (Content c : this.contents) {
                 Sentiment res = analyzeSentimentText(c.getText());
@@ -71,5 +79,17 @@ public class FrameworkImpl implements Framework{
 
     public List<Content> getData() {
         return this.contents;
+    }
+
+    public String getFrameworkName() {
+        if (currentDataPlugin == null) {
+            return FRAMEWORK_BASE_NAME;
+        }
+        String fwName = "Visualization of " + currentDataPlugin.getPluginName() + " Data";
+        return fwName;
+    }
+
+    public boolean hasDataPlugin() {
+        return this.currentDataPlugin != null;
     }
 }

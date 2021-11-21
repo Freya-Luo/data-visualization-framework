@@ -14,8 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class TwitterPlugin implements DataPlugin {
-    private static final String dataPluginName = "Twitter";
-    private String userName;
+    private final String dataPluginName = "Twitter";
     private int dataNumber;
     private Date from;
     private Date to;
@@ -31,7 +30,6 @@ public class TwitterPlugin implements DataPlugin {
     }
 
     public void setup(Map<String, String> paramsMap) {
-        this.userName = paramsMap.get("userName");
         this.dataNumber = Integer.parseInt(paramsMap.get("dataNumber"));
         SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
         try {

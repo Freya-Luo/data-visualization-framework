@@ -1,7 +1,7 @@
 package main.edu.cmu.cs214.hw6.plugin.visualplugin;
 
 import main.edu.cmu.cs214.hw6.framework.core.Content;
-import main.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
+import main.edu.cmu.cs214.hw6.framework.core.VisualPlugin;
 
 import java.util.Date;
 import java.util.List;
