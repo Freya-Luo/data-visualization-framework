@@ -30,4 +30,5 @@ dependencies {
     implementation 'com.google.cloud:google-cloud-language'
     implementation 'org.twitter4j:twitter4j-core:4.0.7'
     implementation group: 'com.github.jknack', name: 'handlebars', version: '4.0.5'
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
 }

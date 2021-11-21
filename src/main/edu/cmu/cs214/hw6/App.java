@@ -6,6 +6,9 @@ import fi.iki.elonen.NanoHTTPD;
 import main.edu.cmu.cs214.hw6.framework.core.DataPlugin;
 import main.edu.cmu.cs214.hw6.framework.core.FrameworkImpl;
 import main.edu.cmu.cs214.hw6.framework.gui.VisualPlugin;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +18,8 @@ import java.util.ServiceLoader;
 public class App extends NanoHTTPD {
     public static void main(String[] args) {
         try {
+            BasicConfigurator.configure();
+            Logger.getRootLogger().setLevel(Level.OFF);
             new App();
         } catch (IOException ioe) {
             System.err.println("Couldn't start server:\n" + ioe);
