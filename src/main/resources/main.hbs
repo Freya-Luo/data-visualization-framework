@@ -5,20 +5,82 @@
   <title>Data Visualization Framework</title>
 
   <style>
+    body {
+        margin: 0;
+    }
+    a {
+        background: yellowgreen;
+        text-decoration: none;
+        color: darkred;
+        padding: 10px;
+        font-size: 8rem;
+        border: 6px solid;
+        border-radius: 2rem;
+    }
 
+    h2 {
+        margin: 0;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: yellowgreen;
+        margin-bottom: 40px;
+    }
+
+    #data_sources_wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: fit-content;
+        margin: auto;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        color: white;
+    }
+
+    input,
+    select {
+        font-size: 1.3rem;
+        color: lightgray;
+        margin-bottom: 10px;
+    }
+
+    #form_wrapper {
+        background-color: cadetblue;
+        padding: 20px;
+        width: fit-content;
+        margin-left: 5rem;
+        font-size: 2rem;
+        border-radius: 10px;
+    }
+
+    button {
+        font-size: 1.3rem;
+        width: 50%;
+        margin: auto;
+        border: none;
+        background: lightgrey;
+        border-radius: 5px;
+    }
   </style>
   <script src='https://cdn.plot.ly/plotly-2.6.3.min.js'></script>
 </head>
 
-
-
 <body>
-    <h2>{{name}}<h2>
+    <h2>{{name}}</h2>
     {{#eq stage 0 }}
+    <div id="data_sources_wrapper">
         <a href="/plugin?i=0">News</a>
         <a href="/plugin?i=1">Twitter</a>
+    </div>
     {{/eq}}
     {{#eq stage 1 }}
+    <div id="form_wrapper">
          <form id="form" onsubmit="passParams()">
                <label for="time_from">From:</label>
                <input id="time_from" type="date" name="from"/>
@@ -43,12 +105,12 @@
                      {{/eq}}
                <button id="form_btn" type="submit">OK</button>
          </form>
-
-        <div id="barchart"></div>
-        <div id="piechart"></div>
-        {{#each scores}}
-            <input type="hidden" class="score" value="{{this}}"/>
-        {{/each}}
+    </div>
+    <div id="barchart"></div>
+    <div id="piechart"></div>
+    {{#each scores}}
+         <input type="hidden" class="score" value="{{this}}" style="display: none;"/>
+    {{/each}}
     {{/eq}}
 </body>
 <script type="text/javascript">
@@ -110,8 +172,13 @@ if(scoresEles.length != 0) {
       hole: .4,
       type: 'pie',
       marker: {
-         colors: ['darkblue', 'lightblue', 'lightgray', 'pink', 'red']
-      }
+         colors: ['#D3D3D3', '#F4A460', '#90EE90', '#00BFFF', '#8A2BE2']
+      },
+      color_discrete_map: {'employed':'blue',
+                                          'unemployed': 'red',
+                                  'underemployed job seekers':'lightblue',
+                                  'underemployed non-job seekers':'orange'
+                   }
     }];
 
 
@@ -129,7 +196,6 @@ if(scoresEles.length != 0) {
         }],
       height: 400,
       width: 600,
-      showlegend: false,
       grid: {rows: 1, columns: 1}
     };
 
