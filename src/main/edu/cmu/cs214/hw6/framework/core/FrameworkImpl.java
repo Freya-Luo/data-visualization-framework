@@ -42,6 +42,12 @@ public class FrameworkImpl implements Framework{
     public void registerVisualPlugins(List<VisualPlugin> visualPlugins) {
         this.visualPlugins.addAll(visualPlugins);
     }
+    public void init() {
+        this.stage = 0;
+        this.dataPlugins.clear();
+        this.visualPlugins.clear();
+        this.currentVisualPlugins.clear();
+    }
 
     public void init(DataPlugin dp, List<VisualPlugin> vps) {
         if (currentDataPlugin != dp) {

@@ -45,11 +45,15 @@
          </form>
 
         <div id="barchart"></div>
+        {{#each timestamps}}
+            <input type="hidden" class="timeline" value="{{this}}"/>
+        {{/each}}
         <div id="piechart"></div>
         {{#each scores}}
             <input type="hidden" class="score" value="{{this}}"/>
         {{/each}}
     {{/eq}}
+    <a href="/">Back to Home</a>
 </body>
 <script type="text/javascript">
 
@@ -70,6 +74,8 @@ function passParams() {
 
 const dataLabel = "{{ currentPluginName }}"
 const scoresEles = document.getElementsByClassName("score")
+const timelines = document.getElementsByClassName("timeline")
+
 
 // const scores = []
 // Array.from(scoresEles).forEach((el) => {
@@ -114,6 +120,41 @@ if(scoresEles.length != 0) {
       }
     }];
 
+    let x = []
+    Array.from(timelines).forEach((tl) => {
+            x.push(tl.value)
+    })
+    let scores = []
+        Array.from(scoresEles).forEach((el) => {
+                scores.push(+el.value)
+        })
+    //console.log(x)
+    console.log(scores)
+
+    var data1 = [
+      {
+        x: [...x],
+        y: [...scores],
+        type: 'bar',
+        name: 'bar chart for scores'
+      }
+    ];
+    var layout2 = {
+          title: 'Trade of Sentiment Score',
+          annotations: [
+            {
+              font: {
+                size: 20
+              },
+              text: dataLabel,
+              x: 0.5,
+              y: 0.5
+            }],
+          height: 400,
+          width: 600,
+          showlegend: false,
+          grid: {rows: 1, columns: 1}
+        };
 
     var layout = {
       title: 'Sentiment Score of Content',
@@ -134,6 +175,7 @@ if(scoresEles.length != 0) {
     };
 
     Plotly.newPlot('piechart', data, layout)
+    Plotly.newPlot('barchart', data1, layout2);
 }
 
 </script>

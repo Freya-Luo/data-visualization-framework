@@ -60,7 +60,9 @@ public class App extends NanoHTTPD {
         try {
             String uri = session.getUri();
             Map<String, String> params = session.getParms();
-            if (uri.equals("/plugin")) {
+            if (uri.equals("/")) {
+                this.framework.init();
+            } else if (uri.equals("/plugin")) {
                 this.framework.init(dataPlugins.get(Integer.parseInt(params.get("i"))), visualPlugins);
             } else if (uri.equals("/getparams")){
                 this.framework.fetchData(params);
