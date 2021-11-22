@@ -10,6 +10,8 @@ import twitter4j.conf.ConfigurationBuilder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class TwitterPlugin implements DataPlugin {
     private final String dataPluginName = "Twitter";
@@ -35,11 +37,14 @@ public class TwitterPlugin implements DataPlugin {
 
     public void setup(Map<String, String> paramsMap) {
         this.dataNumber = Integer.parseInt(paramsMap.get("dataNumber"));
-        //this.dataNumber = 50;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         try {
             this.from = format.parse(paramsMap.get("from"));
-            this.to = format.parse(paramsMap.get("to"));
+            // add one extra day to "to"
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(format.parse(paramsMap.get("to")));
+            cal.add( Calendar.DATE, 1 );
+            this.to = cal.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -62,63 +67,28 @@ public class TwitterPlugin implements DataPlugin {
         int rest = this.dataNumber % MAX_NUMBER;
         Paging p = new Paging(1, MAX_NUMBER);
         Twitter twitter = getTwitter();
-        String user = "";
-
+        CountDownLatch countDownLatch = new CountDownLatch(1);
         try {
             for(int i = 0; i < pages; i++) {
                 p.setPage(i+1);
-                statuses.addAll(twitter.getUserTimeline(user, p));
+                statuses.addAll(twitter.getHomeTimeline( p));
             }
-            p.setPage(pages + 1);
-            statuses.addAll(twitter.getUserTimeline(user, p));
-            System.out.println("Showing @" + user + "'s user timeline.");
+            p.setPage(pages+1);
+            statuses.addAll(twitter.getHomeTimeline(p).subList(0, rest));;
             for (Status status : statuses) {
-                System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+                //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 Date timeStamp = status.getCreatedAt();
-                if (timeStamp.after(this.from) && timeStamp.before((this.to))) {
+                if (!timeStamp.before(this.from) && !timeStamp.after((this.to))) {
                     this.pluginData.add(toContent(status));
                 }
             }
-
-        } catch (TwitterException e) {
+            countDownLatch.countDown();
+            countDownLatch.await(1L, TimeUnit.SECONDS);
+        } catch (TwitterException|InterruptedException e) {
             setErrorMsg("Failed to get timeline: " + e.getMessage());
-            System.out.println("Failed to get timeline: " + e.getMessage());
             e.printStackTrace();
         }
     }
-    /*public void getDataFromParams() {
-        // oauth for twitter
-        Twitter twitter = getTwitter();
-        //Twitter twitter = new TwitterFactory().getInstance();
-        try {
-            String cursor = null;
-            DirectMessageList messages;
-            do {
-                messages = cursor == null ? twitter.getDirectMessages(this.dataNumber) : twitter.getDirectMessages(this.dataNumber, cursor);
-                System.out.println("size:"+messages.size());
-                for (DirectMessage message : messages) {
-                    System.out.println("From: " + message.getSenderId() + " id:" + message.getId()
-                            + " [" + message.getCreatedAt() + "]"
-                            + " - " + message.getText());
-                    System.out.println("raw[" + message + "]");
-                }
-                cursor = messages.getNextCursor();
-            } while (messages.size() > 0 && cursor != null);
-            System.out.println("done.");
-            // convert to Content type and filter the time period
-            for (DirectMessage message : messages) {
-                Date timeStamp = message.getCreatedAt();
-                //if (timeStamp.after(this.from) && timeStamp.before((this.to))) {
-                    this.pluginData.add(toContent(message));
-                //}
-            }
-        } catch (TwitterException te) {
-            te.printStackTrace();
-            System.out.println("Failed to get messages: " + te.getMessage());
-            //System.exit(-1);
-        }
-
-    }*/
 
     public Content toContent(Status s) {
         Content c = new Content(s.getText(), s.getCreatedAt());

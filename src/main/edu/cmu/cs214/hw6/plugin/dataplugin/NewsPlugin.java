@@ -35,6 +35,7 @@ public class NewsPlugin implements DataPlugin {
         from = paramsMap.get("from");
         to = paramsMap.get("to");
         sources = paramsMap.get("sources");
+        //System.out.println(sources);
     }
 
     private EverythingRequest buildQuery() {
@@ -72,7 +73,6 @@ public class NewsPlugin implements DataPlugin {
                             p.printStackTrace();
                         }
                     }
-
                     @Override
                     public void onFailure(Throwable throwable) {
                         System.out.println(throwable.getMessage());

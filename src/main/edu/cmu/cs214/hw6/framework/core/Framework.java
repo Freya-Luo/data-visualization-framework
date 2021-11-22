@@ -8,5 +8,5 @@ public interface Framework {
     void registerVisualPlugins(List<VisualPlugin> visualPlugins);
     void analyze();
     void fetchData(Map<String, String> paramsMap);
-    List<Content> setVisualData();
+    void setVisualData();
 };

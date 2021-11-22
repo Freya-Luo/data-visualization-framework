@@ -31,7 +31,7 @@
                          <label for="news_sources">Sources:</label>
                          <select id="news_sources" name="sources">
                               <option value="bbc-news">BBC News</option>
-                              <option value="bloomberg">Bloomberg</option>
+                              <option value="cbs-news">CBS News</option>
                               <option value="abc-news">ABC News</option>
                          </select>
                     <form>
@@ -69,37 +69,72 @@ function passParams() {
 }
 
 const dataLabel = "{{ currentPluginName }}"
-const scores = document.getElementsByClassName("score")
-console.log(scores)
-var data = [{
-  values: [...scores],
-  labels: ['Very Negative', 'Negative', 'Neutral', 'Positive', 'Very Positive'],
-  domain: {column: 0},
-  hoverinfo: 'label+percent',
-  hole: .4,
-  type: 'pie'
-}];
+const scoresEles = document.getElementsByClassName("score")
+
+// const scores = []
+// Array.from(scoresEles).forEach((el) => {
+//     scores.push(+el.value )
+// })
+
+function countSentimentScores() {
+    let veryNegative = 0, negative = 0, neutral = 0,
+        positive = 0, veryPositive = 0
+
+    Array.from(scoresEles).forEach((el) => {
+        let score = +el.value
+        if (score < -0.6 && score >= -1.0) veryNegative++;
+        else if (score < -0.2 && score >= -0.6) negative++;
+        else if (score <= 0.2 && score >= -0.2) neutral++;
+        else if (score < 0.7 && score >= 0.3) positive++;
+        else if (score <= 1.0 && score >= 0.7) veryPositive++;
+    })
+
+    return {
+        "Very Negative": veryNegative,
+        "Negative": negative,
+        "Neutral": neutral,
+        "Positive": positive,
+        "Very Positive": veryPositive
+    }
+}
+// console.log(scores)
+
+if(scoresEles.length != 0) {
+    const counts = countSentimentScores();
+
+    var data = [{
+      values: [counts["Very Negative"], counts["Negative"], counts["Neutral"], counts["Positive"], counts["Very Positive"]],
+      labels: ['Very Negative', 'Negative', 'Neutral', 'Positive', 'Very Positive'],
+      domain: {column: 0},
+      hoverinfo: 'label+percent',
+      hole: .4,
+      type: 'pie',
+      marker: {
+         colors: ['darkblue', 'lightblue', 'lightgray', 'pink', 'red']
+      }
+    }];
 
 
-var layout = {
-  title: 'Sentiment Score of Content',
-  annotations: [
-    {
-      font: {
-        size: 20
-      },
-      showarrow: false,
-      text: dataLabel,
-      x: 0.17,
-      y: 0.5
-    }],
-  height: 400,
-  width: 600,
-  showlegend: false,
-  grid: {rows: 1, columns: 2}
-};
+    var layout = {
+      title: 'Sentiment Score of Content',
+      annotations: [
+        {
+          font: {
+            size: 20
+          },
+          showarrow: false,
+          text: dataLabel,
+          x: 0.5,
+          y: 0.5
+        }],
+      height: 400,
+      width: 600,
+      showlegend: false,
+      grid: {rows: 1, columns: 1}
+    };
 
-Plotly.newPlot('piechart', data, layout);
+    Plotly.newPlot('piechart', data, layout)
+}
 
 </script>
 </html>

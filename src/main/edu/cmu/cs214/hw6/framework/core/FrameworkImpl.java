@@ -56,18 +56,12 @@ public class FrameworkImpl implements Framework{
         currentDataPlugin.setup(paramsMap);
         currentDataPlugin.getDataFromParams();
         this.contents = currentDataPlugin.getContents();
-//        System.out.println(this.currentDataPlugin.getPluginName());
-//        System.out.println(this.contents.size());
     }
 
-    public List<Content> setVisualData() {
+    public void setVisualData() {
         for(VisualPlugin vp : currentVisualPlugins) {
             vp.setContents(this.contents);
         }
-        return this.contents;
-//        System.out.println("1");
-//        for(Content c: this.contents)
-//            System.out.println(c.getScore());
     }
 
     public void analyze() {
@@ -131,17 +125,25 @@ public class FrameworkImpl implements Framework{
     }
 
     public Float[] getVisualizedScores() {
-//        for(Content c: this.contents) {
-//            System.out.println(c.getScore());
-//        }
-        System.out.println(this.contents);
+        List<Float> scores = new ArrayList<>();
+        if (this.contents != null) {
+            for(Content c : this.contents) {
+                scores.add(c.getScore());
+            }
+            System.out.println(scores);
+            return scores.toArray(new Float[scores.size()]);
+        }
         return new Float[0];
     }
 
     public Date[] getVisualizedTimeStamps() {
-        if (currentVisualPlugins.size() > 0) {
-            List<Date> dates = currentVisualPlugins.get(0).getTimeStamps();
-            return dates.toArray(new Date[dates.size()]);
+        List<Date> timestamps = new ArrayList<>();
+        if (this.contents != null) {
+            for(Content c : this.contents) {
+                timestamps.add(c.getTimeStamp());
+            }
+//            System.out.println(timestamps);
+            return timestamps.toArray(new Date[timestamps.size()]);
         }
         return new Date[0];
     }

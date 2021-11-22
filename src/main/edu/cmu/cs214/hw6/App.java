@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.concurrent.CountDownLatch;
 
 public class App extends NanoHTTPD {
     public static void main(String[] args) {
@@ -65,11 +66,9 @@ public class App extends NanoHTTPD {
                 this.framework.fetchData(params);
                 if (this.framework.hasDataPlugin()) {
                     this.framework.analyze();
-                    List<Content> cs =this.framework.setVisualData();
-                    System.out.println(cs.size() + "ll");
+                    this.framework.setVisualData();
                 }
             }
-
             // Extract the view-specific data from the game and apply it to the template.
             State frameworkState = State.forFramework(this.framework);
             String HTML = this.template.apply(frameworkState);
