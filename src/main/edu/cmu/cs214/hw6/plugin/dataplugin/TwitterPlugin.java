@@ -24,6 +24,8 @@ public class TwitterPlugin implements DataPlugin {
     private int dataNumber;
     private Date from;
     private Date to;
+    private int fromInt;
+    private int toInt;
     private List<Content> pluginData;
     private String msg;
 
@@ -37,14 +39,23 @@ public class TwitterPlugin implements DataPlugin {
 
     public void setup(Map<String, String> paramsMap) {
         this.dataNumber = Integer.parseInt(paramsMap.get("dataNumber"));
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+
         try {
             this.from = format.parse(paramsMap.get("from"));
-            // add one extra day to "to"
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(format.parse(paramsMap.get("to")));
-            cal.add( Calendar.DATE, 1 );
-            this.to = cal.getTime();
+            Calendar cal_from = Calendar.getInstance();
+            cal_from.setTime(this.from);
+            int hour = cal_from.get(Calendar.HOUR);
+            System.out.println("hour"+hour);
+            int min = cal_from.get(Calendar.MINUTE);
+            this.fromInt = hour*100 + min;
+
+            this.to = format.parse(paramsMap.get("to"));
+            Calendar cal_to = Calendar.getInstance();
+            cal_to.setTime(this.to);
+            int hour_to = cal_to.get(Calendar.HOUR);
+            int min_to = cal_to.get(Calendar.MINUTE);
+            this.toInt = hour_to*100 + min_to;
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -78,7 +89,17 @@ public class TwitterPlugin implements DataPlugin {
             for (Status status : statuses) {
                 //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 Date timeStamp = status.getCreatedAt();
-                if (!timeStamp.before(this.from) && !timeStamp.after((this.to))) {
+
+                Calendar cal_all = Calendar.getInstance();
+                //SimpleDateFormat format_date = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss'Z'");
+                cal_all.setTime(timeStamp);
+                int hour = cal_all.get(Calendar.HOUR);
+                int min = cal_all.get(Calendar.MINUTE);
+                int timeStampInt = hour*100 + min;
+                System.out.println(timeStampInt);
+                System.out.println(this.fromInt);
+                System.out.println(this.toInt);
+                if ((timeStampInt >= this.fromInt)  && (timeStampInt <= this.toInt)){
                     this.pluginData.add(toContent(status));
                 }
             }
