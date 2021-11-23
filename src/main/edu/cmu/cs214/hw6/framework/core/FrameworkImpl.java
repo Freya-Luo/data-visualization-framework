@@ -28,6 +28,7 @@ public class FrameworkImpl implements Framework{
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
         this.currentVisualPlugins = new ArrayList<>();
+        this.contents = new ArrayList<>();
         this.stage = 0;
     }
 
@@ -42,11 +43,13 @@ public class FrameworkImpl implements Framework{
     public void registerVisualPlugins(List<VisualPlugin> visualPlugins) {
         this.visualPlugins.addAll(visualPlugins);
     }
+
     public void init() {
         this.stage = 0;
         this.dataPlugins.clear();
         this.visualPlugins.clear();
         this.currentVisualPlugins.clear();
+        this.contents.clear();
     }
 
     public void init(DataPlugin dp, List<VisualPlugin> vps) {

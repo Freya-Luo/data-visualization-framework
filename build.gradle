@@ -27,5 +27,5 @@ dependencies {
     implementation group: 'com.github.jknack', name: 'handlebars', version: '4.0.7'
     implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
     implementation group: 'com.github.jknack', name: 'handlebars', version: '4.0.6'
-    testImplementation 'org.mockito:mockito-core:2.7.19'
+    testImplementation 'org.mockito:mockito-core:2.28.2'
 }

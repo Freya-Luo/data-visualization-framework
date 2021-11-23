@@ -24,6 +24,8 @@ public class TwitterPlugin implements DataPlugin {
     private int dataNumber;
     private Date from;
     private Date to;
+    private int fromInt;
+    private int toInt;
     private List<Content> pluginData;
     private String msg;
 
@@ -37,17 +39,8 @@ public class TwitterPlugin implements DataPlugin {
 
     public void setup(Map<String, String> paramsMap) {
         this.dataNumber = Integer.parseInt(paramsMap.get("dataNumber"));
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.US);
-        try {
-            this.from = format.parse(paramsMap.get("from"));
-            // add one extra day to "to"
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(format.parse(paramsMap.get("to")));
-            cal.add( Calendar.DATE, 1 );
-            this.to = cal.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        this.fromInt = Integer.parseInt(String.join("", paramsMap.get("from").split(":")));
+        this.toInt = Integer.parseInt(String.join("", paramsMap.get("to").split(":")));
     }
 
     private Twitter getTwitter() {
@@ -78,7 +71,16 @@ public class TwitterPlugin implements DataPlugin {
             for (Status status : statuses) {
                 //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 Date timeStamp = status.getCreatedAt();
-                if (!timeStamp.before(this.from) && !timeStamp.after((this.to))) {
+
+                Calendar cal_all = Calendar.getInstance();
+                cal_all.setTime(timeStamp);
+                int hour = cal_all.get(Calendar.HOUR_OF_DAY);
+                int min = cal_all.get(Calendar.MINUTE);
+                int timeStampInt = hour*100 + min;
+                System.out.println(timeStampInt);
+                System.out.println(this.fromInt);
+                System.out.println(this.toInt);
+                if ((timeStampInt >= this.fromInt)  && (timeStampInt <= this.toInt)){
                     this.pluginData.add(toContent(status));
                 }
             }
