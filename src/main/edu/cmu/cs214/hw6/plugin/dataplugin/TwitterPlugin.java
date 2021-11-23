@@ -37,7 +37,7 @@ public class TwitterPlugin implements DataPlugin {
 
     public void setup(Map<String, String> paramsMap) {
         this.dataNumber = Integer.parseInt(paramsMap.get("dataNumber"));
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.US);
         try {
             this.from = format.parse(paramsMap.get("from"));
             // add one extra day to "to"

@@ -2,13 +2,6 @@ plugins {
     id 'java'
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
-}
-
 sourceSets {
     main {
         java {
@@ -16,6 +9,13 @@ sourceSets {
         }
     }
 }
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+
 dependencies {
     implementation 'junit:junit:4.12'
     implementation 'com.github.KwabenBerko:News-API-Java:1.0.0'
@@ -27,4 +27,5 @@ dependencies {
     implementation group: 'com.github.jknack', name: 'handlebars', version: '4.0.7'
     implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.29'
     implementation group: 'com.github.jknack', name: 'handlebars', version: '4.0.6'
+    testImplementation 'org.mockito:mockito-core:2.7.19'
 }
