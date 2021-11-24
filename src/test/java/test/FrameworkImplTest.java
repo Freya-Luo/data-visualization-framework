@@ -1,18 +1,14 @@
 package test;
 
-import com.google.cloud.language.v1.*;
+import com.google.cloud.language.v1.AnalyzeSentimentResponse;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import edu.cmu.cs.cs214.hw6.framework.core.*;
-import edu.cmu.cs214.hw6.plugin.dataplugin.NewsPlugin;
 import edu.cmu.cs.cs214.hw6.plugin.dataplugin.TwitterPlugin;
 import edu.cmu.cs.cs214.hw6.plugin.visualplugin.BarPlugin;
 import edu.cmu.cs.cs214.hw6.plugin.visualplugin.PiePlugin;
-import com.google.cloud.language.v1.AnalyzeSentimentResponse;
-import com.google.cloud.language.v1.Document.Type;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
@@ -21,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class FrameworkImplTest {
-    private Framework f;
+    private FrameworkImpl f;
     private List<DataPlugin> currentDtaPlugin;
     private List<VisualPlugin> currentVisPlugin;
     private LanguageServiceClient language;
@@ -56,7 +52,7 @@ public class FrameworkImplTest {
 
         f.fetchData(paramsMap);
         List<Content> contentsMock = new ArrayList<>();
-        contentsMock.add(new Content("hhhh", new Date("Mon Nov 22 23:45:02 EST 2021")));
+        contentsMock.add(new Content("wwww", new Date("Mon Nov 22 23:45:02 EST 2021")));
         f.setContents(contentsMock);
         List<Content> content = f.getContents();
         assertEquals(content, f.getContents());
@@ -64,14 +60,15 @@ public class FrameworkImplTest {
     @Test
     public void analyzeTest() {
         List<Content> contentsMock = new ArrayList<>();
-        contentsMock.add(new Content("hhhh", new Date("Mon Nov 22 23:45:02 EST 2021")));
+        contentsMock.add(new Content("wwww", new Date("Mon Nov 22 23:45:02 EST 2021")));
         f.setContents(contentsMock);
-        f.analyze();
         AnalyzeSentimentResponse resp = mock(AnalyzeSentimentResponse.class);
         Sentiment sentimentMock = mock(Sentiment.class);
         when(resp.getDocumentSentiment()).thenReturn(sentimentMock);
-        when(sentimentMock.getScore()).thenReturn(0.5f);
+        when(sentimentMock.getScore()).thenReturn(0.3f);
         f.analyze();
-        assertEquals(0.5f, f.getVisualizedScores());
+        //System.out.println("test:"+f.analyzeSentimentText(contentsMock.get(0).getText()).getScore());
+        //System.out.println();
+        assertEquals(0.3f, f.getVisualizedScores()[0], 0.0f);
     }
 }

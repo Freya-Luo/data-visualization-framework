@@ -22,8 +22,12 @@ public class FrameworkImpl implements Framework{
 
     private final String FRAMEWORK_BASE_NAME = "A Data Visualization Framework";
 
-    public FrameworkImpl() throws IOException {
-        language = LanguageServiceClient.create();
+    public FrameworkImpl() {
+        try {
+            language = LanguageServiceClient.create();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
         this.currentVisualPlugins = new ArrayList<>();
@@ -80,13 +84,14 @@ public class FrameworkImpl implements Framework{
             for (Content c : this.contents) {
                 Sentiment res = analyzeSentimentText(c.getText());
                 c.setScore(res.getScore());
+                System.out.println("------"+res.getScore());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private Sentiment analyzeSentimentText(String text) throws Exception {
+    public Sentiment analyzeSentimentText(String text) {
         // [START language_sentiment_text]
         // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
         Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
@@ -134,7 +139,7 @@ public class FrameworkImpl implements Framework{
             for(Content c : this.contents) {
                 scores.add(c.getScore());
             }
-            System.out.println(scores);
+            System.out.println("getvisualscore:"+scores);
             return scores.toArray(new Float[scores.size()]);
         }
         return new Float[0];
@@ -150,5 +155,13 @@ public class FrameworkImpl implements Framework{
             return timestamps.toArray(new Date[timestamps.size()]);
         }
         return new Date[0];
+    }
+
+    public List<Content> getContents() {
+        return this.contents;
+    }
+
+    public void setContents(List<Content> contents) {
+        this.contents = contents;
     }
 }
