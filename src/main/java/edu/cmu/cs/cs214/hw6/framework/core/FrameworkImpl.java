@@ -43,6 +43,9 @@ public class FrameworkImpl implements Framework{
         this.visualPlugins.addAll(visualPlugins);
     }
 
+    /**
+     * Reset the initial status of the framework.
+     */
     public void init() {
         this.stage = 0;
         this.dataPlugins.clear();

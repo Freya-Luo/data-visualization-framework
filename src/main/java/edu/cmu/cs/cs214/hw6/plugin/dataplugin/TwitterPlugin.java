@@ -61,7 +61,7 @@ public class TwitterPlugin implements DataPlugin {
         try {
             for(int i = 0; i < pages; i++) {
                 p.setPage(i+1);
-                statuses.addAll(twitter.getHomeTimeline( p));
+                statuses.addAll(twitter.getHomeTimeline(p));
             }
             p.setPage(pages+1);
             statuses.addAll(twitter.getHomeTimeline(p).subList(0, rest));;
@@ -82,7 +82,7 @@ public class TwitterPlugin implements DataPlugin {
                 }
             }
             countDownLatch.countDown();
-            countDownLatch.await(1L, TimeUnit.SECONDS);
+            countDownLatch.await(2L, TimeUnit.SECONDS);
         } catch (TwitterException|InterruptedException e) {
             setErrorMsg("Failed to get timeline: " + e.getMessage());
             e.printStackTrace();

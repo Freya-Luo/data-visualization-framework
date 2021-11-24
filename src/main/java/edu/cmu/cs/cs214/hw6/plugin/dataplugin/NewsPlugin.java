@@ -1,17 +1,20 @@
 package edu.cmu.cs.cs214.hw6.plugin.dataplugin;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.jzhangdeveloper.newsapi.models.Everything;
 import com.jzhangdeveloper.newsapi.net.NewsAPI;
 import com.jzhangdeveloper.newsapi.net.NewsAPIClient;
-import com.jzhangdeveloper.newsapi.net.NewsAPIResponse;
 import com.jzhangdeveloper.newsapi.params.EverythingParams;
 import edu.cmu.cs.cs214.hw6.framework.core.Content;
 import edu.cmu.cs.cs214.hw6.framework.core.DataPlugin;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -38,16 +41,7 @@ public class NewsPlugin implements DataPlugin {
         from = paramsMap.get("from");
         to = paramsMap.get("to");
         sources = paramsMap.get("sources");
-        //System.out.println(sources);
     }
-    //private EverythingRequest buildQuery() {
-//        return new EverythingRequest.Builder()
-//                .language(language)
-//                .from(from)
-//                .to(to)
-//                .sources(sources)
-//                .build();
- //   }
 
 //    private void collectContentData(ArticleResponse response) throws ParseException {
 //        for(Article a: response.getArticles()) {
@@ -62,21 +56,31 @@ public class NewsPlugin implements DataPlugin {
 
 
     public void getDataFromParams(){
-        //CountDownLatch countDownLatch = new CountDownLatch(1);
-//        Map<String, String> params = EverythingParams.newBuilder()
-//                .setLanguage(language).setFrom(from).setTo(to)
-//                .build();
-//        CountDownLatch countDownLatch = new CountDownLatch(1);
-//        try {
-//            NewsAPIResponse response  = newsApiClient.getEverything(params);
-//            Everything everything = response.getBody();
-////            JsonObject obj = response.getBodyAsJson();
-//            System.out.println(everything.count() + " " + everything.getStatus());
-//            countDownLatch.countDown();
-//            countDownLatch.await(1L, TimeUnit.SECONDS);
-//        } catch (IOException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        Map<String, String> params = EverythingParams.newBuilder()
+                .setLanguage(language).setFrom(from).setTo(to).setSources(sources)
+                .build();
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        try {
+            JsonObject response  = newsApiClient.getEverything(params).getBodyAsJson();
+            JsonArray data = response.get("articles").getAsJsonArray();
+            for(JsonElement a: data){
+                JsonObject aObj = a.getAsJsonObject();
+                String pubAt = aObj.get("publishedAt").getAsString();
+                String des = aObj.get("description").getAsString();
+                Date publishedAt =new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss'Z'").parse(pubAt);
+                articles.add(new Content(des, publishedAt));
+                //System.out.println(a.getAsJsonObject().get("publishedAt"));
+            }
+
+            for(Content c: articles) {
+                System.out.println(c.getText());
+            }
+
+            countDownLatch.countDown();
+            countDownLatch.await(1L, TimeUnit.SECONDS);
+        } catch (IOException | InterruptedException | ParseException e) {
+            e.printStackTrace();
+        }
 
 //                buildQuery(),
 //                new NewsApiClient.ArticlesResponseCallback() {
