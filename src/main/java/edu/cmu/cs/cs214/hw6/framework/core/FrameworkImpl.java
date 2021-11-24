@@ -61,6 +61,7 @@ public class FrameworkImpl implements Framework{
         }
         currentVisualPlugins.clear();
         currentVisualPlugins.addAll(vps);
+        language = createLanguage();
         this.stage = 1;
     }
 
@@ -84,7 +85,6 @@ public class FrameworkImpl implements Framework{
             for (Content c : this.contents) {
                 Sentiment res = analyzeSentimentText(c.getText());
                 c.setScore(res.getScore());
-                System.out.println("------"+res.getScore());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,7 +103,6 @@ public class FrameworkImpl implements Framework{
     public Sentiment analyzeSentimentText(String text) {
         // [START language_sentiment_text]
         // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
-        language = createLanguage();
         Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
         AnalyzeSentimentResponse response = language.analyzeSentiment(doc);
         Sentiment sentiment = response.getDocumentSentiment();
@@ -149,7 +148,6 @@ public class FrameworkImpl implements Framework{
             for(Content c : this.contents) {
                 scores.add(c.getScore());
             }
-            System.out.println("getvisualscore:"+scores);
             return scores.toArray(new Float[scores.size()]);
         }
         return new Float[0];
@@ -161,7 +159,6 @@ public class FrameworkImpl implements Framework{
             for(Content c : this.contents) {
                 timestamps.add(c.getTimeStamp());
             }
-//            System.out.println(timestamps);
             return timestamps.toArray(new Date[timestamps.size()]);
         }
         return new Date[0];
@@ -174,4 +171,7 @@ public class FrameworkImpl implements Framework{
     public void setContents(List<Content> contents) {
         this.contents = contents;
     }
+     public void setLanguage(LanguageServiceClient language) {
+        this.language = language;
+     }
 }

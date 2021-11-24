@@ -56,23 +56,19 @@ public class NewsPlugin implements DataPlugin {
 
 
     public void getDataFromParams(){
-        System.out.println("99999");
         Map<String, String> params = EverythingParams.newBuilder()
                 .setLanguage(language).setFrom(from).setTo(to).setSources(sources)
                 .build();
         CountDownLatch countDownLatch = new CountDownLatch(1);
         try {
-            System.out.println("======");
             JsonObject response  = newsApiClient.getEverything(params).getBodyAsJson();
             JsonArray data = response.get("articles").getAsJsonArray();
             for(JsonElement a: data){
                 JsonObject aObj = a.getAsJsonObject();
                 String pubAt = aObj.get("publishedAt").getAsString();
                 String des = aObj.get("description").getAsString();
-                System.out.println("des:"+des);
                 Date publishedAt =new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss'Z'").parse(pubAt);
                 articles.add(new Content(des, publishedAt));
-                System.out.println(a.getAsJsonObject().get("publishedAt"));
             }
 
             for(Content c: articles) {
