@@ -23,11 +23,11 @@ public class FrameworkImpl implements Framework{
     private final String FRAMEWORK_BASE_NAME = "A Data Visualization Framework";
 
     public FrameworkImpl() {
-        try {
+        /*try {
             language = LanguageServiceClient.create();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
         this.currentVisualPlugins = new ArrayList<>();
@@ -93,9 +93,19 @@ public class FrameworkImpl implements Framework{
         }
     }
 
+    public LanguageServiceClient createLanguage() {
+        try {
+            language = LanguageServiceClient.create();
+            return language;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public Sentiment analyzeSentimentText(String text) {
         // [START language_sentiment_text]
         // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
+        language = createLanguage();
         Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
         AnalyzeSentimentResponse response = language.analyzeSentiment(doc);
         Sentiment sentiment = response.getDocumentSentiment();
@@ -141,7 +151,7 @@ public class FrameworkImpl implements Framework{
             for(Content c : this.contents) {
                 scores.add(c.getScore());
             }
-
+            System.out.println("getvisualscore:"+scores);
             return scores.toArray(new Float[scores.size()]);
         }
         return new Float[0];
