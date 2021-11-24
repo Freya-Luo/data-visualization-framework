@@ -157,7 +157,7 @@ public class FrameworkImplTest {
     /*@Test
     public void analyzeTest() {
         List<Content> contentsMock = new ArrayList<>();
-        contentsMock.add(new Content("wwww", new Date("Mon Nov 22 23:45:02 EST 2021")));
+        contentsMock.add(new Content("im so happy", new Date("Mon Nov 22 23:45:02 EST 2021")));
         f.setContents(contentsMock);
         Document doc = mock(Document.class);
         AnalyzeSentimentResponse resp = mock(AnalyzeSentimentResponse.class);
