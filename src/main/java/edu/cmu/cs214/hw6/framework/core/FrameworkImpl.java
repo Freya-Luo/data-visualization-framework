@@ -22,8 +22,12 @@ public class FrameworkImpl implements Framework{
 
     private final String FRAMEWORK_BASE_NAME = "A Data Visualization Framework";
 
-    public FrameworkImpl() throws IOException {
-        language = LanguageServiceClient.create();
+    public FrameworkImpl(){
+        try {
+            language = LanguageServiceClient.create();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
         this.currentVisualPlugins = new ArrayList<>();
@@ -86,7 +90,7 @@ public class FrameworkImpl implements Framework{
         }
     }
 
-    private Sentiment analyzeSentimentText(String text) throws Exception {
+    private Sentiment analyzeSentimentText(String text) {
         // [START language_sentiment_text]
         // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
         Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
@@ -95,10 +99,6 @@ public class FrameworkImpl implements Framework{
         if (sentiment == null) {
             System.out.println("No sentiment found");
         }
-//        else {
-//            System.out.printf("Sentiment magnitude: %.3f\n", sentiment.getMagnitude());
-//            System.out.printf("Sentiment score: %.3f\n", sentiment.getScore());
-//        }
         return sentiment;
     }
 
@@ -154,5 +154,13 @@ public class FrameworkImpl implements Framework{
             return timestamps.toArray(new Date[timestamps.size()]);
         }
         return new Date[0];
+    }
+
+    public void setContents(List<Content> contents) {
+        this.contents = contents;
+    }
+
+    public List<Content> getContents() {
+        return this.contents;
     }
 }

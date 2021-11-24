@@ -35,6 +35,7 @@ public class TwitterPlugin implements DataPlugin {
     }
 
     public void setup(Map<String, String> paramsMap) {
+        System.out.println(paramsMap);
         this.dataNumber = Integer.parseInt(paramsMap.get("dataNumber"));
         this.fromInt = Integer.parseInt(String.join("", paramsMap.get("from").split(":")));
         this.toInt = Integer.parseInt(String.join("", paramsMap.get("to").split(":")));
@@ -68,15 +69,13 @@ public class TwitterPlugin implements DataPlugin {
             for (Status status : statuses) {
                 //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 Date timeStamp = status.getCreatedAt();
+                System.out.println(timeStamp);
 
                 Calendar cal_all = Calendar.getInstance();
                 cal_all.setTime(timeStamp);
                 int hour = cal_all.get(Calendar.HOUR_OF_DAY);
                 int min = cal_all.get(Calendar.MINUTE);
                 int timeStampInt = hour*100 + min;
-                System.out.println(timeStampInt);
-                System.out.println(this.fromInt);
-                System.out.println(this.toInt);
                 if ((timeStampInt >= this.fromInt)  && (timeStampInt <= this.toInt)){
                     this.pluginData.add(toContent(status));
                 }

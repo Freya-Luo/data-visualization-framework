@@ -1,5 +1,6 @@
 package main.java.edu.cmu.cs214.hw6.framework.core;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,4 +10,13 @@ public interface Framework {
     void analyze();
     void fetchData(Map<String, String> paramsMap);
     void setVisualData();
+    List<Content> getContents();
+    void init();
+    void init(DataPlugin dataPlugin, List<VisualPlugin> currentVisPlugin);
+    void setContents(List<Content> contents);
+    Float[] getVisualizedScores();
+    Date[] getVisualizedTimeStamps();
+    String getMsg();
+    String getCurrentDataPluginName();
+
 };
