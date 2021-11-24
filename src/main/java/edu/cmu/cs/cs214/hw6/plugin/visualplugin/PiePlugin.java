@@ -17,7 +17,7 @@ public class PiePlugin implements VisualPlugin {
         this.contents = contents;
         getVisualizedData();
         for(Float s: scores){
-            System.out.println(s);
+            System.out.println("set content"+s);
         }
     }
 
