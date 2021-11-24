@@ -93,7 +93,7 @@ public class FrameworkImpl implements Framework{
         }
     }
 
-    private Sentiment analyzeSentimentText(String text) throws Exception {
+    public Sentiment analyzeSentimentText(String text) {
         // [START language_sentiment_text]
         // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
         Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
