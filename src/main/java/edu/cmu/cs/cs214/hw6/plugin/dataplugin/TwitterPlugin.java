@@ -61,7 +61,7 @@ public class TwitterPlugin implements DataPlugin {
         try {
             for(int i = 0; i < pages; i++) {
                 p.setPage(i+1);
-                statuses.addAll(twitter.getHomeTimeline( p));
+                statuses.addAll(twitter.getHomeTimeline(p));
             }
             p.setPage(pages+1);
             statuses.addAll(twitter.getHomeTimeline(p).subList(0, rest));;

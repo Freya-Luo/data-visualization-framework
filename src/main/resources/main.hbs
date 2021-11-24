@@ -9,23 +9,42 @@
         margin: 0;
     }
     a {
-        background: yellowgreen;
+        background: darkslateblue;
+        text-align: center;
         text-decoration: none;
-        color: darkred;
-        padding: 10px;
-        font-size: 8rem;
+        color: white;
+        padding: 20px;
+        font-size: 6rem;
         border: 6px solid;
         border-radius: 2rem;
     }
 
-    h2 {
+    #header {
         margin: 0;
         height: 100px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: yellowgreen;
+        position: relative;
         margin-bottom: 40px;
+    }
+
+    h2 {
+        font-size: 3rem;
+        color: darkslateblue;
+    }
+
+    #back_btn {
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.3rem;
+        width: fit-content;
+        position: absolute;
+        padding: 5px;
+        background-color: darkslateblue;
+        color: white;
+        border: none;
+        border-radius: 5px;
     }
 
     #data_sources_wrapper {
@@ -37,32 +56,37 @@
     }
 
     form {
+        margin: auto;
         display: flex;
         flex-direction: column;
-        width: fit-content;
+        width: 17rem;
         color: white;
     }
 
     input,
     select {
         font-size: 1.3rem;
-        color: lightgray;
+        border: none;
+        padding: 5px;
+        border-radius: 3px;
+        color: gray;
         margin-bottom: 10px;
     }
 
     #form_wrapper {
-        background-color: cadetblue;
+        background-color: darkslateblue;
         padding: 20px;
         width: fit-content;
-        margin-left: 5rem;
+        margin: auto;
         font-size: 2rem;
         border-radius: 10px;
     }
 
-    button {
+    #form_btn {
         font-size: 1.3rem;
-        width: 50%;
+        width: 20%;
         margin: auto;
+        padding: 5px;
         border: none;
         background: lightgrey;
         border-radius: 5px;
@@ -70,11 +94,11 @@
   </style>
   <script src='https://cdn.plot.ly/plotly-2.6.3.min.js'></script>
 </head>
-
-
-
 <body>
-    <h2>{{name}}<h2>
+    <div id="header">
+        <h2>{{name}}</h2>
+        <button id="back_btn" onclick="location.href='/'">Back to Home</button>
+    </div>
     {{#eq stage 0 }}
     <div id="data_sources_wrapper">
         <a href="/plugin?i=0">News</a>
@@ -108,9 +132,12 @@
                      {{/eq}}
                <button id="form_btn" type="submit">OK</button>
          </form>
+         <div id="chart_wrapper" style="margin-top: 10px">
+            <div id="barchart"></div>
+            <div id="piechart"></div>
+         </div>
     </div>
-    <div id="barchart"></div>
-    <div id="piechart"></div>
+
     {{#each timestamps}}
         <input type="hidden" class="timeline" value="{{this}}"/>
     {{/each}}
@@ -118,7 +145,6 @@
         <input type="hidden" class="score" value="{{this}}"/>
     {{/each}}
     {{/eq}}
-    <a href="/">Back to Home</a>
 </body>
 <script type="text/javascript">
 

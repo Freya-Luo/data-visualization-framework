@@ -1,8 +1,5 @@
 package edu.cmu.cs.cs214.hw6.framework.core;
 
-import com.jzhangdeveloper.newsapi.net.NewsAPI;
-import com.jzhangdeveloper.newsapi.net.NewsAPIClient;
-
 import java.util.List;
 import java.util.Map;
 
