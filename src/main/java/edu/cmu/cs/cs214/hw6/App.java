@@ -88,7 +88,6 @@ public class App extends NanoHTTPD {
         ServiceLoader<DataPlugin> dataPlugins = ServiceLoader.load(DataPlugin.class);
         List<DataPlugin> res = new ArrayList<>();
         for (DataPlugin plugin : dataPlugins) {
-            System.out.println("Loaded plugin " + plugin.getPluginName());
             res.add(plugin);
         }
         return res;
@@ -98,7 +97,6 @@ public class App extends NanoHTTPD {
         ServiceLoader<VisualPlugin> visualPlugins = ServiceLoader.load(VisualPlugin.class);
         List<VisualPlugin> res = new ArrayList<>();
         for (VisualPlugin plugin : visualPlugins) {
-            System.out.println("Loaded plugin " + plugin.getPluginName());
             res.add(plugin);
         }
         return res;

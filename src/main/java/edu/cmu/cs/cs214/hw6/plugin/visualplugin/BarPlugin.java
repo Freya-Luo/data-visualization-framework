@@ -30,7 +30,6 @@ public class BarPlugin implements VisualPlugin {
     }
 
     public List<Float> getScores(){
-        System.out.println(scores.size() + "llll");
         return scores;
     }
 

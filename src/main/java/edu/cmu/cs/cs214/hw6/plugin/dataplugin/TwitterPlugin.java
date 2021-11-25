@@ -86,6 +86,7 @@ public class TwitterPlugin implements DataPlugin {
 
     /**
      * Get the Twitter class using access token and secret
+     * @return Twitter class
      */
     private Twitter getTwitter() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -118,7 +119,6 @@ public class TwitterPlugin implements DataPlugin {
             p.setPage(pages+1);
             statuses.addAll(twitter.getHomeTimeline(p).subList(0, rest));
             for (Status status : statuses) {
-                System.out.println(status.getText());
                 Date timeStamp = status.getCreatedAt();
                 Calendar cal_all = Calendar.getInstance();
                 cal_all.setTime(timeStamp);
@@ -129,7 +129,6 @@ public class TwitterPlugin implements DataPlugin {
                 if ((timeStampInt >= this.fromInt)  && (timeStampInt <= this.toInt)){
                     this.pluginData.add(toContent(status));
                 }
-                System.out.println(pluginData.size());
             }
             countDownLatch.countDown();
             countDownLatch.await(1L, TimeUnit.SECONDS);

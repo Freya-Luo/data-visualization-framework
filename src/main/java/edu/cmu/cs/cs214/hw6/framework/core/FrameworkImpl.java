@@ -97,17 +97,6 @@ public class FrameworkImpl implements Framework{
         this.stage = 2;
     }
 
-    public void init(DataPlugin dp, List<VisualPlugin> vps) {
-        if (currentDataPlugin == null || currentDataPlugin != dp) {
-            currentDataPlugin = dp;
-        }
-        currentVisualPlugins.clear();
-        currentVisualPlugins.addAll(vps);
-        language = createLanguage();
-        this.frameworkName = PLUGIN_BASE_NAME + currentDataPlugin.getPluginName();
-        this.stage = 1;
-    }
-
     /**
      * Fetch the data with parameters
      * @param paramsMap
@@ -161,7 +150,6 @@ public class FrameworkImpl implements Framework{
      * @return Sentiment with scores
      */
     public Sentiment analyzeSentimentText(String text) {
-        // [START language_sentiment_text]
         // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
         Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
         AnalyzeSentimentResponse response = language.analyzeSentiment(doc);
@@ -195,7 +183,6 @@ public class FrameworkImpl implements Framework{
         List<String> res = new ArrayList<>();
         for(VisualPlugin vp : currentVisualPlugins) {
             res.add(vp.getPluginName());
-            System.out.println(vp.getPluginName() + "ll");
         }
         return res.toArray(new String[0]);
     }

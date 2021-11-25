@@ -77,7 +77,8 @@ public class FrameworkImplTest {
                 }
         );
         f.initDataPlugin(nwsPlugin);
-        f.initVisualPlugin(currentVisPlugin);        f.fetchData(paramsMap);
+        f.initVisualPlugin(currentVisPlugin);
+        f.fetchData(paramsMap);
         List<Content> contentsMock = new ArrayList<>();
         contentsMock.add(new Content("ohh", new Date("Mon Nov 22 23:45:02 EST 2021")));
         List<Content> content = f.getContents();

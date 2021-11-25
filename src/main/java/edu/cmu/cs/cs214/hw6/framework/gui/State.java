@@ -72,14 +72,10 @@ public class State {
     }
 
     public String[] getCurrentVisualPluginNames() {
-        for(String vp: currentVisualPluginNames) {
-           System.out.println(vp);
-        }
         return this.currentVisualPluginNames;
     }
 
     public Float[] getScores() {
-
         return scores;
     }
 
