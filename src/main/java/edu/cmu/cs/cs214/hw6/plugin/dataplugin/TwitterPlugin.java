@@ -60,6 +60,10 @@ public class TwitterPlugin implements DataPlugin {
             this.msg = TIME_ERR_MSG;
             return;
         }
+        if (paramsMap.get("dataNumber").equals("")) {
+            this.msg = NUMBER_ERR_MSG;
+            return;
+        }
         this.dataNumber = Integer.parseInt(paramsMap.get("dataNumber"));
         this.fromInt = Integer.parseInt(String.join("", paramsMap.get("from").split(":")));
         this.toInt = Integer.parseInt(String.join("", paramsMap.get("to").split(":")));

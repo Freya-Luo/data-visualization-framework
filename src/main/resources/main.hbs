@@ -63,7 +63,7 @@
         margin: auto;
     }
 
-    form {
+    #params_form {
         margin: auto;
         display: flex;
         flex-direction: column;
@@ -117,10 +117,15 @@
          <div id="msg_box">{{info}}</div>
     {{/if}}
     {{#eq stage 1 }}
-    <div id="data_sources_wrapper">
-        <a href="/visualplugin?i=0">Bar</a>
-        <a href="/visualplugin?i=1">Pie</a>
-    </div>
+    <form id="visual_form" onsubmit="chooseVPs()">
+        <input type="checkbox" id="bar" name="vp0" value="0">
+        <label for="bar">Show Bar Chart</label><br>
+        <input type="checkbox" id="pie" name="vp1" value="1">
+        <label for="pie">Show Pie Chart</label><br>
+        <button type="submit">Apply</button>
+{{!--         <a href="/visualplugin?i=0">Bar</a> --}}
+{{!--         <a href="/visualplugin?i=1">Pie</a> --}}
+    </form>
     <!--<div id="form_wrapper">
         <form id="form" onsubmit="passParams4Visual()">
             <div id="visual_sources_wrapper">
@@ -136,7 +141,7 @@
     {{/eq}}
     {{#eq stage 2 }}
     <div id="form_wrapper">
-         <form id="form" onsubmit="passParams()">
+         <form id="params_form" onsubmit="passParams()">
                {{#eq currentPluginName "News"}}
                     <!-- News Plugin Rendering Page -->
                      <label for="time_from">From:</label>
@@ -173,14 +178,30 @@
     {{#each scores}}
         <input type="hidden" class="score" value="{{this}}"/>
     {{/each}}
+
     {{/eq}}
+    {{#each currentVisualPluginNames}}
+        <input type="hidden" class="vp" value="{{this}}"/>
+    {{/each}}
 </body>
 <script type="text/javascript">
 
+function chooseVPs() {
+    const form = document.getElementById("visual_form")
+    const checkboxes = form.getElementsByTagName('input');
+
+//     let vpsChecked
+//     for(let i = 0; i < checkboxes.length; i++) {
+//         if (checkboxes[i].type == "checkbox" && checkboxes[i].checked) {
+//             vpsChecked += checkboxes[i].value + "-"
+//         }
+//     }
+    form.action = "/visualplugin"
+}
 
 function passParams() {
     let phase = "{{currentPluginName}}";
-    const form = document.getElementById("form")
+    const form = document.getElementById("params_form")
     const time_from = document.getElementById("time_from").value
     const time_to = document.getElementById("time_to").value
 
@@ -251,7 +272,7 @@ if(scoresEles.length != 0) {
       {}
     );
     //Object.keys(time_scores).sort(function ( a, b ) { return b - a; } ).forEach(a=>time_scores_sorted[a]=time_scores[a])
-    console.log(time_scores_sorted)
+
     let x = []
     let scores = []
     /*Array.from(time_scores).forEach((ts) => {
@@ -317,13 +338,34 @@ if(scoresEles.length != 0) {
       showlegend: false,
       grid: {rows: 1, columns: 1}
     };
-    if ("{{currentVisualPluginName}}" == "pie chart") {
+
+    const vps = document.getElementsByClassName("vp")
+    const vpsStore = Array.from(vps).map(vp => vp.value);
+
+    if (vpsStore.indexOf("pie chart") != -1) {
         Plotly.newPlot('piechart', data, layout)
     }
-    if ("{{currentVisualPluginName}}" == "bar chart") {
-    Plotly.newPlot('barchart', data1, layout2);
+
+    if (vpsStore.indexOf("bar chart") != -1) {
+        Plotly.newPlot('barchart', data1, layout2)
     }
+    console.log(vpsStore)
+//     Array.from(vps).forEach((vp) => {
+//         if (vp.value === "pie chart") {
+//              Plotly.newPlot('piechart', data, layout)
+//         }
+//         if (vp.value === "bar chart") {
+//             Plotly.newPlot('barchart', data1, layout2)
+//         }
+//     })
+//     if ("{{currentVisualPluginName}}" == "pie chart") {
+//         Plotly.newPlot('piechart', data, layout)
+//     }
+//     if ("{{currentVisualPluginName}}" == "bar chart") {
+//     Plotly.newPlot('barchart', data1, layout2);
+//     }
 }
+
 
 </script>
 </html>

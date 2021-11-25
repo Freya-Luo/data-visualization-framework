@@ -60,7 +60,13 @@ public class App extends NanoHTTPD {
             } else if (uri.equals("/dataplugin")) {
                 this.framework.initDataPlugin(dataPlugins.get(Integer.parseInt(params.get("i"))));
             } else if (uri.equals("/visualplugin")) {
-                this.framework.initVisualPlugin(visualPlugins.get(Integer.parseInt(params.get("i"))));
+                List<VisualPlugin> vps = new ArrayList<>();
+                for(int i = 0; i < visualPlugins.size(); i++) {
+                    if (params.get("vp" + i) != null) {
+                        vps.add(visualPlugins.get(Integer.parseInt(params.get("vp" + i))));
+                    }
+                }
+                this.framework.initVisualPlugin(vps);
             } else if (uri.equals("/getparams")){
                 this.framework.fetchData(params);
                 if (this.framework.hasDataPlugin()) {

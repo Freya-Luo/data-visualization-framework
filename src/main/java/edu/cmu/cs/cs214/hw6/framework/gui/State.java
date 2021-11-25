@@ -2,6 +2,7 @@ package edu.cmu.cs.cs214.hw6.framework.gui;
 
 import edu.cmu.cs.cs214.hw6.framework.core.DataPlugin;
 import edu.cmu.cs.cs214.hw6.framework.core.FrameworkImpl;
+import edu.cmu.cs.cs214.hw6.framework.core.VisualPlugin;
 
 import java.util.Date;
 import java.util.List;
@@ -9,18 +10,18 @@ import java.util.List;
 public class State {
     private final String name;
     private final String currentPluginName;
-    private final String currentVisualPluginName;
+    private final String[] currentVisualPluginNames;
     private final PluginInfo[] pluginInfos;
     private final Float[] scores;
     private final Date[] timestamps;
     private final int stage;
     private String info;
 
-    public State(String name, String currentPluginName, String currentViusalPluginName, PluginInfo[] pluginInfos,
+    public State(String name, String currentPluginName, String[] currentVisualPluginNames, PluginInfo[] pluginInfos,
                  Float[] scores, Date[] timestamps, int stage, String info) {
         this.name = name;
         this.currentPluginName = currentPluginName;
-        this.currentVisualPluginName = currentViusalPluginName;
+        this.currentVisualPluginNames = currentVisualPluginNames.clone();
         this.pluginInfos = pluginInfos;
         this.scores = scores;
         this.timestamps = timestamps;
@@ -31,14 +32,14 @@ public class State {
     public static State forFramework(FrameworkImpl framework) {
         String name = framework.getFrameworkName();
         String currentPluginName = framework.getCurrentDataPluginName();
-        String currentVisualPluginName = framework.getCurrentVisualPluginName();
+        String[] currentVisualPluginNames = framework.getCurrentVisualPluginNames();
         Float[] scores = framework.getVisualizedScores();
         Date[] timestamps = framework.getVisualizedTimeStamps();
         String info = framework.getInfo();
         PluginInfo[] pluginInfos = getDataPlugins(framework);
         int stage = framework.getStage();
 
-        return new State(name, currentPluginName, currentVisualPluginName, pluginInfos,
+        return new State(name, currentPluginName, currentVisualPluginNames, pluginInfos,
                 scores, timestamps, stage, info);
     }
 
@@ -70,8 +71,11 @@ public class State {
         return this.currentPluginName;
     }
 
-    public String getCurrentVisualPluginName() {
-        return this.currentVisualPluginName;
+    public String[] getCurrentVisualPluginNames() {
+        for(String vp: currentVisualPluginNames) {
+           System.out.println(vp);
+        }
+        return this.currentVisualPluginNames;
     }
 
     public Float[] getScores() {
