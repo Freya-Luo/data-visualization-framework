@@ -23,6 +23,11 @@ mvn site && mvn exec:exec
 ````
 Then you can try on http://localhost:8080/
 
+Notifications:
+- You must choose at least one type chart to visualize your data, or it will not display the sentiment score.
+- When choosing time period, the `From date` should be earlier than `To data`, or it will show the error msg "Please provide a valid date range." but won't crash the framework.
+- If the To date is greater than current date, the framework treats To date as current date.
+- You can choose multiple charts to display the sentiment scores.
 ##Our Framework
 Our framework is to analyze sentiment of articles/trends collected within a specific period of time. 
 For example, analyzing a set of texts, whether they are positive, negative or normal, based on scores. 
