@@ -13,17 +13,17 @@ public class State {
     private final Float[] scores;
     private final Date[] timestamps;
     private final int stage;
-    private String msg;
+    private String info;
 
     public State(String name, String currentPluginName, PluginInfo[] pluginInfos,
-                 Float[] scores, Date[] timestamps, int stage, String msg) {
+                 Float[] scores, Date[] timestamps, int stage, String info) {
         this.name = name;
         this.currentPluginName = currentPluginName;
         this.pluginInfos = pluginInfos;
         this.scores = scores;
         this.timestamps = timestamps;
         this.stage = stage;
-        this.msg = msg;
+        this.info = info;
     }
 
     public static State forFramework(FrameworkImpl framework) {
@@ -31,12 +31,12 @@ public class State {
         String currentPluginName = framework.getCurrentDataPluginName();
         Float[] scores = framework.getVisualizedScores();
         Date[] timestamps = framework.getVisualizedTimeStamps();
-        String msg = framework.getMsg();
+        String info = framework.getInfo();
         PluginInfo[] pluginInfos = getDataPlugins(framework);
         int stage = framework.getStage();
 
         return new State(name, currentPluginName, pluginInfos,
-                scores, timestamps, stage, msg);
+                scores, timestamps, stage, info);
     }
 
     private static PluginInfo[] getDataPlugins(FrameworkImpl framework) {
@@ -60,6 +60,8 @@ public class State {
     public int getStage() {
         return this.stage;
     }
+
+    public String getInfo() { return this.info;}
 
     public String getCurrentPluginName() {
         return this.currentPluginName;

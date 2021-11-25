@@ -47,6 +47,14 @@
         border-radius: 5px;
     }
 
+    #msg_box {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: orangered;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
     #data_sources_wrapper {
         display: flex;
         flex-direction: column;
@@ -105,6 +113,9 @@
         <a href="/plugin?i=1">Twitter</a>
     </div>
     {{/eq}}
+    {{#if info}}
+         <div id="msg_box">{{info}}</div>
+    {{/if}}
     {{#eq stage 1 }}
     <div id="form_wrapper">
          <form id="form" onsubmit="passParams()">
@@ -166,12 +177,6 @@ function passParams() {
 const dataLabel = "{{ currentPluginName }}"
 const scoresEles = document.getElementsByClassName("score")
 const timelines = document.getElementsByClassName("timeline")
-
-
-// const scores = []
-// Array.from(scoresEles).forEach((el) => {
-//     scores.push(+el.value )
-// })
 
 function countSentimentScores() {
     let veryNegative = 0, negative = 0, neutral = 0,
