@@ -81,6 +81,7 @@ public class FrameworkImpl implements Framework{
         if (language == null) {
             language = createLanguage();
         }
+        this.frameworkName = PLUGIN_BASE_NAME + currentDataPlugin.getPluginName();
         this.stage = 1;
     }
 
