@@ -17,7 +17,7 @@ public class FrameworkImpl implements Framework{
     private List<DataPlugin> dataPlugins;
     private List<VisualPlugin> visualPlugins;
     private DataPlugin currentDataPlugin;
-    private VisualPlugin currentVisualPlugins;
+    private List<VisualPlugin> currentVisualPlugins;
     private String frameworkName;
     private String instruction;
     private int stage;
@@ -31,7 +31,7 @@ public class FrameworkImpl implements Framework{
         this.instruction = "";
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
-        //this.currentVisualPlugins = new ArrayList<>();
+        this.currentVisualPlugins = new ArrayList<>();
         this.contents = new ArrayList<>();
         this.frameworkName = FRAMEWORK_BASE_NAME;
     }
@@ -62,7 +62,7 @@ public class FrameworkImpl implements Framework{
     public void reset() {
         this.stage = 0;
         this.instruction = "";
-        //this.currentVisualPlugins.clear();
+        this.currentVisualPlugins.clear();
         this.currentDataPlugin = null;
         this.contents.clear();
         this.frameworkName = FRAMEWORK_BASE_NAME;
@@ -87,10 +87,10 @@ public class FrameworkImpl implements Framework{
     /**
      * Init currentVisualPlugins
      */
-    public void initVisualPlugin(VisualPlugin vp) {
-        if (currentVisualPlugins != vp) {
-            currentVisualPlugins = vp;
-        }
+    public void initVisualPlugin(List<VisualPlugin> vps) {
+        currentVisualPlugins.clear();
+        currentVisualPlugins.addAll(vps);
+
         if (language == null) {
             language = createLanguage();
         }
@@ -101,8 +101,8 @@ public class FrameworkImpl implements Framework{
         if (currentDataPlugin == null || currentDataPlugin != dp) {
             currentDataPlugin = dp;
         }
-        //currentVisualPlugins.clear();
-        //currentVisualPlugins.addAll(vps);
+        currentVisualPlugins.clear();
+        currentVisualPlugins.addAll(vps);
         language = createLanguage();
         this.frameworkName = PLUGIN_BASE_NAME + currentDataPlugin.getPluginName();
         this.stage = 1;
@@ -120,10 +120,9 @@ public class FrameworkImpl implements Framework{
     }
 
     public void setVisualData() {
-        /*for(VisualPlugin vp : currentVisualPlugins) {
+        for(VisualPlugin vp : currentVisualPlugins) {
             vp.setContents(this.contents);
-        }*/
-        this.currentVisualPlugins.setContents(this.contents);
+        }
     }
 
     public void analyze() {
@@ -192,11 +191,13 @@ public class FrameworkImpl implements Framework{
         return "";
     }
 
-    public String getCurrentVisualPluginName() {
-        if (this.currentVisualPlugins != null) {
-            return this.currentVisualPlugins.getPluginName();
+    public String[] getCurrentVisualPluginNames() {
+        List<String> res = new ArrayList<>();
+        for(VisualPlugin vp : currentVisualPlugins) {
+            res.add(vp.getPluginName());
+            System.out.println(vp.getPluginName() + "ll");
         }
-        return "";
+        return res.toArray(new String[0]);
     }
 
     public String getInfo() {
