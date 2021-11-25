@@ -37,11 +37,18 @@ public class NewsPlugin implements DataPlugin {
         articles = new ArrayList<>();
     }
 
+    /**
+     * Reset the state of data plugin and msg
+     */
     public void reset() {
         articles.clear();
         this.msg = "";
     }
 
+    /**
+     * Set up the data plugin with params from user chosen e.g. bbc-news
+     * @param paramsMap the time period and sources of data
+     */
     public void setup(Map<String, String> paramsMap) {
         from = paramsMap.get("from");
         to = paramsMap.get("to");
@@ -50,6 +57,11 @@ public class NewsPlugin implements DataPlugin {
         this.msg = "";
     }
 
+    /**
+     * Check if the parameters are valid
+     * @return true if date is not null
+     * and from date is bigger than to date
+     */
     private boolean checkParams() {
         if (from.equals("") || to.equals("")) {
             this.msg = DATE_ERR_MSG;
@@ -71,6 +83,9 @@ public class NewsPlugin implements DataPlugin {
         return true;
     }
 
+    /**
+     * Fetch News data via API
+     */
     public void getDataFromParams(){
         if (!checkParams()) return;
         Map<String, String> params = EverythingParams.newBuilder()
@@ -93,6 +108,7 @@ public class NewsPlugin implements DataPlugin {
             e.printStackTrace();
         }
     }
+
 
     public String getPluginName() {
         return this.name;

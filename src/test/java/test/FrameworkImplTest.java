@@ -76,8 +76,8 @@ public class FrameworkImplTest {
                     return jsonMock;
                 }
         );
-        f.init(nwsPlugin, currentVisPlugin);
-        f.fetchData(paramsMap);
+        f.initDataPlugin(nwsPlugin);
+        f.initVisualPlugin(currentVisPlugin);        f.fetchData(paramsMap);
         List<Content> contentsMock = new ArrayList<>();
         contentsMock.add(new Content("ohh", new Date("Mon Nov 22 23:45:02 EST 2021")));
         List<Content> content = f.getContents();
@@ -107,7 +107,9 @@ public class FrameworkImplTest {
         currentVisPlugin.add(new BarPlugin());
         f.registerDataPlugins(currentDtaPlugin);
         f.registerVisualPlugins(currentVisPlugin);
-        f.init(nwsPlugin, currentVisPlugin);
+        f.initDataPlugin(nwsPlugin);
+        f.initVisualPlugin(currentVisPlugin);
+        //f.init(nwsPlugin, currentVisPlugin);
         f.setLanguage(language);
         f.analyze();
         verify(language).analyzeSentiment(any(Document.class));

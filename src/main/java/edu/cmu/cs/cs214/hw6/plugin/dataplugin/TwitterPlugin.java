@@ -31,10 +31,18 @@ public class TwitterPlugin implements DataPlugin {
         this.pluginData = new ArrayList<>();
     }
 
+    /**
+     * Get the name of data plugin
+     */
     public String getPluginName() {
         return this.dataPluginName;
     }
 
+    /**
+     * Check if the parameters are valid
+     * @return true if number of data is positive number
+     * and from date is bigger than to date
+     */
     private boolean checkParams() {
         if (dataNumber <= 0) {
             this.msg = NUMBER_ERR_MSG;
@@ -48,11 +56,18 @@ public class TwitterPlugin implements DataPlugin {
         return true;
     }
 
+    /**
+     * Reset the state of data plugin and msg
+     */
     public void reset() {
         pluginData.clear();
         this.msg = "";
     }
 
+    /**
+     * Set up the data plugin with params from user chosen e.g. number of data
+     * @param paramsMap the time period and number of data
+     */
     public void setup(Map<String, String> paramsMap) {
         this.msg = "";
         this.pluginData.clear();
@@ -65,6 +80,9 @@ public class TwitterPlugin implements DataPlugin {
         this.toInt = Integer.parseInt(String.join("", paramsMap.get("to").split(":")));
     }
 
+    /**
+     * Get the Twitter class using access token and secret
+     */
     private Twitter getTwitter() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
@@ -77,6 +95,9 @@ public class TwitterPlugin implements DataPlugin {
         return tf.getInstance();
     }
 
+    /**
+     * Fetch Twitter data via API
+     */
     public  void getDataFromParams() {
         if (!this.msg.equals("") || !checkParams()) return;
         List<Status> statuses = new ArrayList<>();
@@ -113,15 +134,25 @@ public class TwitterPlugin implements DataPlugin {
         }
     }
 
+    /**
+     * Convert Status to Content class
+     * @return Content class
+     */
     public Content toContent(Status s) {
         Content c = new Content(s.getText(), s.getCreatedAt());
         return c;
     }
 
+    /**
+     * @return List of Content
+     */
     public List<Content> getContents() {
         return pluginData;
     }
 
+    /**
+     * @return msg
+     */
     public String getErrorMsg() {
         return this.msg;
     }

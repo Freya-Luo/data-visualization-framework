@@ -36,6 +36,10 @@ public class FrameworkImpl implements Framework{
         this.frameworkName = FRAMEWORK_BASE_NAME;
     }
 
+    /**
+     * Add data plugins to the list dataPlugins
+     * @param dataPlugins
+     */
     public void registerDataPlugins(List<DataPlugin> dataPlugins) {
         this.dataPlugins.addAll(dataPlugins);
     }
@@ -44,10 +48,17 @@ public class FrameworkImpl implements Framework{
         return this.dataPlugins;
     }
 
+    /**
+     * Add visual plugins to the list visualPlugins
+     * @param visualPlugins
+     */
     public void registerVisualPlugins(List<VisualPlugin> visualPlugins) {
         this.visualPlugins.addAll(visualPlugins);
     }
 
+    /**
+     * Reset the state of framework and clear the list
+     */
     public void reset() {
         this.stage = 0;
         this.instruction = "";
@@ -60,6 +71,9 @@ public class FrameworkImpl implements Framework{
         }
     }
 
+    /**
+     * Init currentDataPlugin
+     */
     public void initDataPlugin(DataPlugin dp) {
         if (currentDataPlugin != dp) {
             currentDataPlugin = dp;
@@ -70,6 +84,9 @@ public class FrameworkImpl implements Framework{
         this.stage = 1;
     }
 
+    /**
+     * Init currentVisualPlugins
+     */
     public void initVisualPlugin(VisualPlugin vp) {
         if (currentVisualPlugins != vp) {
             currentVisualPlugins = vp;
@@ -91,6 +108,10 @@ public class FrameworkImpl implements Framework{
         this.stage = 1;
     }
 
+    /**
+     * Fetch the data with parameters
+     * @param paramsMap
+     */
     public void fetchData(Map<String, String> paramsMap) {
         this.instruction = "";
         currentDataPlugin.setup(paramsMap);
@@ -122,6 +143,10 @@ public class FrameworkImpl implements Framework{
         }
     }
 
+    /**
+     * Create Google NLP LanguageServiceClient
+     * @return
+     */
     public LanguageServiceClient createLanguage() {
         try {
             language = LanguageServiceClient.create();
@@ -131,6 +156,11 @@ public class FrameworkImpl implements Framework{
         }
         return null;
     }
+
+    /**
+     * Analyze the sentiment using Google NLP
+     * @return Sentiment with scores
+     */
     public Sentiment analyzeSentimentText(String text) {
         // [START language_sentiment_text]
         // Instantiate the Language client com.google.cloud.language.v1.LanguageServiceClient
@@ -144,6 +174,9 @@ public class FrameworkImpl implements Framework{
         return this.frameworkName;
     }
 
+    /**
+     * @return true if the current data plugin exists
+     */
     public boolean hasDataPlugin() {
         return this.currentDataPlugin != null;
     }
