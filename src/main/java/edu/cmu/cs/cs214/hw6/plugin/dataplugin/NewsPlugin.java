@@ -8,7 +8,6 @@ import com.jzhangdeveloper.newsapi.net.NewsAPIClient;
 import com.jzhangdeveloper.newsapi.params.EverythingParams;
 import edu.cmu.cs.cs214.hw6.framework.core.Content;
 import edu.cmu.cs.cs214.hw6.framework.core.DataPlugin;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -29,7 +28,8 @@ public class NewsPlugin implements DataPlugin {
     private List<Content> articles;
     private NewsAPI.Builder builder;
     private NewsAPIClient newsApiClient;
-    private String msg;
+    private String msg = "";
+    private final String DATE_ERR_MSG = "Please provide a valid date range.";
 
     public NewsPlugin() {
         builder = NewsAPI.newClientBuilder();
@@ -37,25 +37,42 @@ public class NewsPlugin implements DataPlugin {
         articles = new ArrayList<>();
     }
 
+    public void reset() {
+        articles.clear();
+        this.msg = "";
+    }
+
     public void setup(Map<String, String> paramsMap) {
         from = paramsMap.get("from");
         to = paramsMap.get("to");
         sources = paramsMap.get("sources");
+        articles.clear();
+        this.msg = "";
     }
 
-//    private void collectContentData(ArticleResponse response) throws ParseException {
-//        for(Article a: response.getArticles()) {
-//            Date publishedAt =new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss'Z'").parse(a.getPublishedAt());
-//            articles.add(new Content(a.getDescription(), publishedAt));
-//        }
-//
-//        for(Content c: articles) {
-//            System.out.println(c.getText());
-//        }
-//    }
+    private boolean checkParams() {
+        if (from.equals("") || to.equals("")) {
+            this.msg = DATE_ERR_MSG;
+            return false;
+        }
 
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date date1 = format.parse(from);
+            Date date2 = format.parse(to);
+
+            if (date1.compareTo(date2) > 0) {
+                this.msg = DATE_ERR_MSG;
+                return false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 
     public void getDataFromParams(){
+        if (!checkParams()) return;
         Map<String, String> params = EverythingParams.newBuilder()
                 .setLanguage(language).setFrom(from).setTo(to).setSources(sources)
                 .build();
@@ -70,39 +87,11 @@ public class NewsPlugin implements DataPlugin {
                 Date publishedAt =new SimpleDateFormat("yyyy-mm-dd'T'HH:mm:ss'Z'").parse(pubAt);
                 articles.add(new Content(des, publishedAt));
             }
-
-            for(Content c: articles) {
-                System.out.println(c.getText());
-            }
-
             countDownLatch.countDown();
             countDownLatch.await(1L, TimeUnit.SECONDS);
         } catch (IOException | InterruptedException | ParseException e) {
             e.printStackTrace();
         }
-
-//                buildQuery(),
-//                new NewsApiClient.ArticlesResponseCallback() {
-//                    @Override
-//                    public void onSuccess(ArticleResponse response) {
-//                        try{
-//                            collectContentData(response);
-//                            countDownLatch.countDown();
-//                        }catch (ParseException p) {
-//                            p.printStackTrace();
-//                        }
-//                    }
-//                    @Override
-//                    public void onFailure(Throwable throwable) {
-//                        System.out.println(throwable.getMessage());
-//                    }
-//                }
-       // );
-//        try {
-//            countDownLatch.await(1L, TimeUnit.SECONDS);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public String getPluginName() {
@@ -113,10 +102,6 @@ public class NewsPlugin implements DataPlugin {
         return articles;
     }
 
-    public void setErrorMsg(String msg) {
-        this.msg = msg;
-    }
-
     public String getErrorMsg() {
         return this.msg;
     }
@@ -124,9 +109,11 @@ public class NewsPlugin implements DataPlugin {
     public void setNewsApiClient(NewsAPIClient newsApiClient) {
         this.newsApiClient = newsApiClient;
     }
+
     public void setBuilder(NewsAPI.Builder build) {
         this.builder = build;
     }
+
     public NewsAPIClient getNewsApiClient() {
         return this.newsApiClient;
     }

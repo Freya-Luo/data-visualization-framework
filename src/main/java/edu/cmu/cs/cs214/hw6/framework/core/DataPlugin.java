@@ -9,4 +9,5 @@ public interface DataPlugin {
     String getPluginName();
     List<Content> getContents();
     String getErrorMsg();
+    void reset();
 }

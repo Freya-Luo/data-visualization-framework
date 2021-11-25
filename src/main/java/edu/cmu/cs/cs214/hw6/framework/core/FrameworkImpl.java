@@ -18,21 +18,22 @@ public class FrameworkImpl implements Framework{
     private List<VisualPlugin> visualPlugins;
     private DataPlugin currentDataPlugin;
     private VisualPlugin currentVisualPlugins;
+    private String frameworkName;
+    private String instruction;
     private int stage;
 
-    private final String FRAMEWORK_BASE_NAME = "A Data Visualization Framework";
+    private final String FRAMEWORK_BASE_NAME = "Text Sentiment Analysis Framework";
+    private final String PLUGIN_BASE_NAME = "Text Sentiment Analysis of ";
+    private final String EMPTY_DATA_RETURNED = "No data in this time range, please reselect parameters.";
 
     public FrameworkImpl() {
-        /*try {
-            language = LanguageServiceClient.create();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        this.stage = 0;
+        this.instruction = "";
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
         //this.currentVisualPlugins = new ArrayList<>();
         this.contents = new ArrayList<>();
-        this.stage = 0;
+        this.frameworkName = FRAMEWORK_BASE_NAME;
     }
 
     public void registerDataPlugins(List<DataPlugin> dataPlugins) {
@@ -47,11 +48,16 @@ public class FrameworkImpl implements Framework{
         this.visualPlugins.addAll(visualPlugins);
     }
 
-    public void init() {
+    public void reset() {
         this.stage = 0;
-        this.dataPlugins.clear();
-        this.visualPlugins.clear();
+        this.instruction = "";
+        //this.currentVisualPlugins.clear();
+        this.currentDataPlugin = null;
         this.contents.clear();
+        this.frameworkName = FRAMEWORK_BASE_NAME;
+        for(DataPlugin dp : dataPlugins) {
+            dp.reset();
+        }
     }
 
     public void initDataPlugin(DataPlugin dp) {
@@ -75,16 +81,18 @@ public class FrameworkImpl implements Framework{
     }
 
     public void init(DataPlugin dp, List<VisualPlugin> vps) {
-        if (currentDataPlugin != dp) {
+        if (currentDataPlugin == null || currentDataPlugin != dp) {
             currentDataPlugin = dp;
         }
         //currentVisualPlugins.clear();
         //currentVisualPlugins.addAll(vps);
         language = createLanguage();
+        this.frameworkName = PLUGIN_BASE_NAME + currentDataPlugin.getPluginName();
         this.stage = 1;
     }
 
     public void fetchData(Map<String, String> paramsMap) {
+        this.instruction = "";
         currentDataPlugin.setup(paramsMap);
         currentDataPlugin.getDataFromParams();
         this.contents = currentDataPlugin.getContents();
@@ -99,7 +107,10 @@ public class FrameworkImpl implements Framework{
 
     public void analyze() {
         if (this.contents.size() <= 0) {
-            System.out.println("No data to analyze!");
+            if (this.currentDataPlugin.getErrorMsg().equals("")) {
+                this.instruction = EMPTY_DATA_RETURNED;
+            }
+            return;
         }
         try {
             for (Content c : this.contents) {
@@ -126,18 +137,11 @@ public class FrameworkImpl implements Framework{
         Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
         AnalyzeSentimentResponse response = language.analyzeSentiment(doc);
         Sentiment sentiment = response.getDocumentSentiment();
-        if (sentiment == null) {
-            System.out.println("No sentiment found");
-        }
         return sentiment;
     }
 
     public String getFrameworkName() {
-        if (currentDataPlugin == null) {
-            return FRAMEWORK_BASE_NAME;
-        }
-        String fwName = "Visualization of " + currentDataPlugin.getPluginName() + " Data";
-        return fwName;
+        return this.frameworkName;
     }
 
     public boolean hasDataPlugin() {
@@ -162,11 +166,13 @@ public class FrameworkImpl implements Framework{
         return "";
     }
 
-    public String getMsg() {
-        if (this.currentDataPlugin != null) {
-            return this.currentDataPlugin.getErrorMsg();
+    public String getInfo() {
+        if (this.currentDataPlugin != null){
+            if (!this.currentDataPlugin.getErrorMsg().equals("")) {
+                this.instruction = this.currentDataPlugin.getErrorMsg();
+            }
         }
-        return "";
+        return this.instruction;
     }
 
     public Float[] getVisualizedScores() {

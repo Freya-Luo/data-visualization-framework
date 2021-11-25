@@ -22,8 +22,6 @@ import java.util.ServiceLoader;
 public class App extends NanoHTTPD {
     public static void main(String[] args) {
         try {
-            //BasicConfigurator.configure();
-            //Logger.getRootLogger().setLevel(Level.OFF);
             new App();
         } catch (IOException ioe) {
             System.err.println("Couldn't start server:\n" + ioe);
@@ -58,7 +56,7 @@ public class App extends NanoHTTPD {
             String uri = session.getUri();
             Map<String, String> params = session.getParms();
             if (uri.equals("/")) {
-                this.framework.init();
+                this.framework.reset();
             } else if (uri.equals("/dataplugin")) {
                 this.framework.initDataPlugin(dataPlugins.get(Integer.parseInt(params.get("i"))));
             } else if (uri.equals("/visualplugin")) {
@@ -82,7 +80,6 @@ public class App extends NanoHTTPD {
 
     private static List<DataPlugin> loadDataPlugins() {
         ServiceLoader<DataPlugin> dataPlugins = ServiceLoader.load(DataPlugin.class);
-        //System.out.println();
         List<DataPlugin> res = new ArrayList<>();
         for (DataPlugin plugin : dataPlugins) {
             System.out.println("Loaded plugin " + plugin.getPluginName());
