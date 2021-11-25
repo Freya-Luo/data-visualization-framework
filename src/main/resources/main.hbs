@@ -71,6 +71,19 @@
         color: white;
     }
 
+    #visual_form {
+        background-color: darkslateblue;
+        color: white;
+        font-size: 2rem;
+        font-weight: 500;
+        width: 30%;
+        text-align: center;
+        margin: auto;
+        padding: 2rem;
+        border: none;
+        border-radius: 10px;
+    }
+
     input,
     select {
         font-size: 1.3rem;
@@ -90,7 +103,15 @@
         border-radius: 10px;
     }
 
-    #form_btn {
+    #visual_btn {
+        font-size: 1.2rem;
+        margin-top: 15px;
+        border: none;
+        border-radius: 3px;
+        padding: 5px 10px;
+    }
+
+    #params_btn {
         font-size: 1.3rem;
         width: 20%;
         margin: auto;
@@ -122,22 +143,8 @@
         <label for="bar">Show Bar Chart</label><br>
         <input type="checkbox" id="pie" name="vp1" value="1">
         <label for="pie">Show Pie Chart</label><br>
-        <button type="submit">Apply</button>
-{{!--         <a href="/visualplugin?i=0">Bar</a> --}}
-{{!--         <a href="/visualplugin?i=1">Pie</a> --}}
+        <button type="submit" id="visual_btn" >Apply</button>
     </form>
-    <!--<div id="form_wrapper">
-        <form id="form" onsubmit="passParams4Visual()">
-            <div id="visual_sources_wrapper">
-            <label for="visualplugin">Choose how to visualize:</label>
-            <select name="visual" id="visualplugin" multiple>
-              <option value="bar">Bar</option>
-              <option value="pie">Pie</option>
-            </select>
-            </div>
-            <button id="form_btn" type="submit">OK</button>
-        </form>
-    </div>-->
     {{/eq}}
     {{#eq stage 2 }}
     <div id="form_wrapper">
@@ -158,13 +165,13 @@
                      {{#eq currentPluginName "Twitter"}}
                          <!-- Twitter Plugin Rendering Page -->
                          <label for="time_from">From:</label>
-                                        <input id="time_from" type="time" name="from"/>
-                                        <label for="time_to">To:</label>
-                                        <input id="time_to" type="time" name="to"/>
+                              <input id="time_from" type="time" name="from"/>
+                              <label for="time_to">To:</label>
+                              <input id="time_to" type="time" name="to"/>
                          <label for="mumber_of_data">Number of data:</label>
                          <input id="mumber_of_data" type="number" name="dataNumber"/>
                      {{/eq}}
-               <button id="form_btn" type="submit">OK</button>
+               <button id="params_btn" type="submit">OK</button>
          </form>
          <div id="chart_wrapper" style="margin-top: 10px">
                 <div id="barchart"></div>
@@ -189,13 +196,6 @@
 function chooseVPs() {
     const form = document.getElementById("visual_form")
     const checkboxes = form.getElementsByTagName('input');
-
-//     let vpsChecked
-//     for(let i = 0; i < checkboxes.length; i++) {
-//         if (checkboxes[i].type == "checkbox" && checkboxes[i].checked) {
-//             vpsChecked += checkboxes[i].value + "-"
-//         }
-//     }
     form.action = "/visualplugin"
 }
 
@@ -239,7 +239,6 @@ function countSentimentScores() {
         "Very Positive": veryPositive
     }
 }
-// console.log(scores)
 
 if(scoresEles.length != 0) {
     const counts = countSentimentScores();
@@ -258,10 +257,8 @@ if(scoresEles.length != 0) {
 
     let time_scores = {}
     for (let i = 0; i < timelines.length; i++) {
-        //var obj = {}
         let t = timelines[i].value.split(" ")[3]
         time_scores[t] = scoresEles[i].value
-        //time_scores.push(obj)
     }
     var time_scores_sorted = {}
     time_scores_sorted = Object.keys(time_scores).sort().reduce(
@@ -271,35 +268,17 @@ if(scoresEles.length != 0) {
       },
       {}
     );
-    //Object.keys(time_scores).sort(function ( a, b ) { return b - a; } ).forEach(a=>time_scores_sorted[a]=time_scores[a])
 
     let x = []
     let scores = []
-    /*Array.from(time_scores).forEach((ts) => {
-          x.push(ts)
-          scores.push(+time_scores[ts])
-        })*/
+
     x = Object.keys(time_scores_sorted)
     scores = Object.values(time_scores_sorted)
-       console.log(x)
-       console.log(scores)
-    /*Array.from(timelines).forEach((tl) => {
-            x.push(tl.value.split(" ")[3])
-            x.sort()
-    })
-    let scores = []
-        Array.from(scoresEles).forEach((el) => {
-                scores.push(+el.value)
-        })*/
-    //console.log(x)
-    //console.log(scores)
 
     var data1 = [
       {
         x: [...x],
         y: [...scores],
-        //x: [1,2,3],
-        //y: [1,2,3],
         type: 'bar',
         name: 'bar chart for scores'
       }
@@ -349,23 +328,6 @@ if(scoresEles.length != 0) {
     if (vpsStore.indexOf("bar chart") != -1) {
         Plotly.newPlot('barchart', data1, layout2)
     }
-    console.log(vpsStore)
-//     Array.from(vps).forEach((vp) => {
-//         if (vp.value === "pie chart") {
-//              Plotly.newPlot('piechart', data, layout)
-//         }
-//         if (vp.value === "bar chart") {
-//             Plotly.newPlot('barchart', data1, layout2)
-//         }
-//     })
-//     if ("{{currentVisualPluginName}}" == "pie chart") {
-//         Plotly.newPlot('piechart', data, layout)
-//     }
-//     if ("{{currentVisualPluginName}}" == "bar chart") {
-//     Plotly.newPlot('barchart', data1, layout2);
-//     }
 }
-
-
 </script>
 </html>

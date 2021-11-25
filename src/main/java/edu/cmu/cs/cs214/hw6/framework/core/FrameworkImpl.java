@@ -67,6 +67,7 @@ public class FrameworkImpl implements Framework{
         if (language == null) {
             language = createLanguage();
         }
+        this.frameworkName = PLUGIN_BASE_NAME + currentDataPlugin.getPluginName();
         this.stage = 1;
     }
 
@@ -79,17 +80,17 @@ public class FrameworkImpl implements Framework{
         }
         this.stage = 2;
     }
-
+//
     public void init(DataPlugin dp, List<VisualPlugin> vps) {
-        if (currentDataPlugin == null || currentDataPlugin != dp) {
-            currentDataPlugin = dp;
-        }
-        currentVisualPlugins.clear();
-        currentVisualPlugins.addAll(vps);
-        language = createLanguage();
-        this.frameworkName = PLUGIN_BASE_NAME + currentDataPlugin.getPluginName();
-        this.stage = 1;
-    }
+//        if (currentDataPlugin == null || currentDataPlugin != dp) {
+//            currentDataPlugin = dp;
+//        }
+//        currentVisualPlugins.clear();
+//        currentVisualPlugins.addAll(vps);
+//        language = createLanguage();
+//        this.frameworkName = PLUGIN_BASE_NAME + currentDataPlugin.getPluginName();
+//        this.stage = 1;
+   }
 
     public void fetchData(Map<String, String> paramsMap) {
         this.instruction = "";
