@@ -9,16 +9,18 @@ import java.util.List;
 public class State {
     private final String name;
     private final String currentPluginName;
+    private final String currentVisualPluginName;
     private final PluginInfo[] pluginInfos;
     private final Float[] scores;
     private final Date[] timestamps;
     private final int stage;
     private String msg;
 
-    public State(String name, String currentPluginName, PluginInfo[] pluginInfos,
+    public State(String name, String currentPluginName, String currentViusalPluginName, PluginInfo[] pluginInfos,
                  Float[] scores, Date[] timestamps, int stage, String msg) {
         this.name = name;
         this.currentPluginName = currentPluginName;
+        this.currentVisualPluginName = currentViusalPluginName;
         this.pluginInfos = pluginInfos;
         this.scores = scores;
         this.timestamps = timestamps;
@@ -29,13 +31,14 @@ public class State {
     public static State forFramework(FrameworkImpl framework) {
         String name = framework.getFrameworkName();
         String currentPluginName = framework.getCurrentDataPluginName();
+        String currentVisualPluginName = framework.getCurrentVisualPluginName();
         Float[] scores = framework.getVisualizedScores();
         Date[] timestamps = framework.getVisualizedTimeStamps();
         String msg = framework.getMsg();
         PluginInfo[] pluginInfos = getDataPlugins(framework);
         int stage = framework.getStage();
 
-        return new State(name, currentPluginName, pluginInfos,
+        return new State(name, currentPluginName, currentVisualPluginName, pluginInfos,
                 scores, timestamps, stage, msg);
     }
 
@@ -63,6 +66,10 @@ public class State {
 
     public String getCurrentPluginName() {
         return this.currentPluginName;
+    }
+
+    public String getCurrentVisualPluginName() {
+        return this.currentVisualPluginName;
     }
 
     public Float[] getScores() {

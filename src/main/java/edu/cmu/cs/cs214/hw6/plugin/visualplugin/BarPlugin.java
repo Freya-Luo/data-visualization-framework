@@ -15,6 +15,7 @@ public class BarPlugin implements VisualPlugin {
 
     public void setContents(List<Content> contents) {
         this.contents = contents;
+        getVisualizedData();
     }
 
     private void getVisualizedData() {
@@ -29,6 +30,7 @@ public class BarPlugin implements VisualPlugin {
     }
 
     public List<Float> getScores(){
+        System.out.println(scores.size() + "llll");
         return scores;
     }
 

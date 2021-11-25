@@ -101,11 +101,29 @@
     </div>
     {{#eq stage 0 }}
     <div id="data_sources_wrapper">
-        <a href="/plugin?i=0">News</a>
-        <a href="/plugin?i=1">Twitter</a>
+        <a href="/dataplugin?i=0">News</a>
+        <a href="/dataplugin?i=1">Twitter</a>
     </div>
     {{/eq}}
     {{#eq stage 1 }}
+    <div id="data_sources_wrapper">
+        <a href="/visualplugin?i=0">Bar</a>
+        <a href="/visualplugin?i=1">Pie</a>
+    </div>
+    <!--<div id="form_wrapper">
+        <form id="form" onsubmit="passParams4Visual()">
+            <div id="visual_sources_wrapper">
+            <label for="visualplugin">Choose how to visualize:</label>
+            <select name="visual" id="visualplugin" multiple>
+              <option value="bar">Bar</option>
+              <option value="pie">Pie</option>
+            </select>
+            </div>
+            <button id="form_btn" type="submit">OK</button>
+        </form>
+    </div>-->
+    {{/eq}}
+    {{#eq stage 2 }}
     <div id="form_wrapper">
          <form id="form" onsubmit="passParams()">
                {{#eq currentPluginName "News"}}
@@ -133,8 +151,8 @@
                <button id="form_btn" type="submit">OK</button>
          </form>
          <div id="chart_wrapper" style="margin-top: 10px">
-            <div id="barchart"></div>
-            <div id="piechart"></div>
+                <div id="barchart"></div>
+                <div id="piechart"></div>
          </div>
     </div>
 
@@ -147,6 +165,7 @@
     {{/eq}}
 </body>
 <script type="text/javascript">
+
 
 function passParams() {
     let phase = "{{currentPluginName}}";
@@ -293,9 +312,12 @@ if(scoresEles.length != 0) {
       showlegend: false,
       grid: {rows: 1, columns: 1}
     };
-
-    Plotly.newPlot('piechart', data, layout)
+    if ("{{currentVisualPluginName}}" == "pie chart") {
+        Plotly.newPlot('piechart', data, layout)
+    }
+    if ("{{currentVisualPluginName}}" == "bar chart") {
     Plotly.newPlot('barchart', data1, layout2);
+    }
 }
 
 </script>

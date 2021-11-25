@@ -17,7 +17,7 @@ public class FrameworkImpl implements Framework{
     private List<DataPlugin> dataPlugins;
     private List<VisualPlugin> visualPlugins;
     private DataPlugin currentDataPlugin;
-    private List<VisualPlugin> currentVisualPlugins;
+    private VisualPlugin currentVisualPlugins;
     private int stage;
 
     private final String FRAMEWORK_BASE_NAME = "A Data Visualization Framework";
@@ -30,7 +30,7 @@ public class FrameworkImpl implements Framework{
         }*/
         this.dataPlugins = new ArrayList<>();
         this.visualPlugins = new ArrayList<>();
-        this.currentVisualPlugins = new ArrayList<>();
+        //this.currentVisualPlugins = new ArrayList<>();
         this.contents = new ArrayList<>();
         this.stage = 0;
     }
@@ -51,16 +51,35 @@ public class FrameworkImpl implements Framework{
         this.stage = 0;
         this.dataPlugins.clear();
         this.visualPlugins.clear();
-        this.currentVisualPlugins.clear();
         this.contents.clear();
+    }
+
+    public void initDataPlugin(DataPlugin dp) {
+        if (currentDataPlugin != dp) {
+            currentDataPlugin = dp;
+        }
+        if (language == null) {
+            language = createLanguage();
+        }
+        this.stage = 1;
+    }
+
+    public void initVisualPlugin(VisualPlugin vp) {
+        if (currentVisualPlugins != vp) {
+            currentVisualPlugins = vp;
+        }
+        if (language == null) {
+            language = createLanguage();
+        }
+        this.stage = 2;
     }
 
     public void init(DataPlugin dp, List<VisualPlugin> vps) {
         if (currentDataPlugin != dp) {
             currentDataPlugin = dp;
         }
-        currentVisualPlugins.clear();
-        currentVisualPlugins.addAll(vps);
+        //currentVisualPlugins.clear();
+        //currentVisualPlugins.addAll(vps);
         language = createLanguage();
         this.stage = 1;
     }
@@ -72,9 +91,10 @@ public class FrameworkImpl implements Framework{
     }
 
     public void setVisualData() {
-        for(VisualPlugin vp : currentVisualPlugins) {
+        /*for(VisualPlugin vp : currentVisualPlugins) {
             vp.setContents(this.contents);
-        }
+        }*/
+        this.currentVisualPlugins.setContents(this.contents);
     }
 
     public void analyze() {
@@ -131,6 +151,13 @@ public class FrameworkImpl implements Framework{
     public String getCurrentDataPluginName() {
         if (this.currentDataPlugin != null) {
             return this.currentDataPlugin.getPluginName();
+        }
+        return "";
+    }
+
+    public String getCurrentVisualPluginName() {
+        if (this.currentVisualPlugins != null) {
+            return this.currentVisualPlugins.getPluginName();
         }
         return "";
     }
