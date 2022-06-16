@@ -1,58 +1,60 @@
 # hw6-analytics-framework-haveagoodday
 
-##How to start
-Before running this framework, you need to set Environment Path for google nlp API:
-````shell
-export GOOGLE_APPLICATION_CREDENTIALS=${PROJ_PATH}/framework-332720-6c53b39aa17c.json
-````
-It is better to use absolute path for PROJ_PATH, which is the absolute path of `framework-332720-6c53b39aa17c.json` file.
+### Project Overview
+![Overview](./framework.gif)
 
-If there is error like :
-```
-java.io.IOException: 
-The Application Default Credentials are not available. 
-They are available if running in Google Compute Engine. Otherwise, the environment variable GOOGLE_APPLICATION_CREDENTIALS must be defined pointing to a file defining the credentials.
-```
-Try enter `export GOOGLE_APPLICATION_CREDENTIALS=${PROJ_PATH}/framework-332720-6c53b39aa17c.json
-` in IntelliJ terminal instead of modify the configuration of IntelliJ.
+This framework utilizes the text passed from data plugins, analyzes the sentiment using Google Natural Language Processiong (NLP) API and calculates scores (positive, neutral, or negative). The returned scores and timestamps would be consumed by visualization plugins, and different charts will be rendered.
 
-After successfully set GOOGLE_APPLICATION_CREDENTIALS environment path, run the framework:
-<br>
-````
-mvn site && mvn exec:exec
-````
-Then you can try on http://localhost:8080/
+In this project, there are two default data plugins and two default visualization plugins for the purpose of demonstration. 
 
-Notifications:
-- You must choose at least one type chart to visualize your data, or it will not display the sentiment score.
-- When choosing time period, the `From date` should be earlier than `To data`, or it will show the error msg "Please provide a valid date range." but won't crash the framework.
-- If the To date is greater than current date, the framework treats To date as current date.
-- You can choose multiple charts to display the sentiment scores.
-##Our Framework
-Our framework is to analyze sentiment of articles/trends collected within a specific period of time. 
-For example, analyzing a set of texts, whether they are positive, negative or normal, based on scores. 
-The framework can work for wide range of difference data resources and we provide sample data plugins --
-Twitter texts (using Twitter4J API) and News headlines (using News API). 
-
-`Data Plugins` can fetch data via API and return a list of Content class including `text` and `time_stamp`. Sample data plugins are:
+`Data Plugins` can fetch data via APIs and return a list of **Content** class including `text` and `time_stamp`. Sample data plugins are:
 
 -   `TwitterPlugin`
     -   Fetches a list of Twitter Trends which happened within a specific period of time using the Twitter4J API
 -   `NewsPlugin`
     -   Fetches a list News Articles that were published within a period of time with News API
 
-The data plugins should have text with time stamps. Then the framework can go through some steps to get the sentiment scores, sends the results back to the visualization plugins and displays them on the GUI. 
+The data plugins should have `text` and `time_stamp` fields. Then the framework can go through internal steps to get the sentiment scores, send the results back to the visualization plugins and display them via GUI. 
 The result data will have sentiment scores and timestamps.
 
-After analyzed by Google NLP API, the framework sends a list of Content class including `text`, `time_stamp` and `sentiment score` to the `Visualization Plugins`, 
-which could present the following features. We also provide two sample visualization plugins as below:
+After being analyzed by Google NLP API, the results are sent to `Visualization Plugins`:
 
 -   Bar charts showing the magnitude of positive`Trends/Events` over time
 -   Pie Charts displaying the relative number of positive and negative `Trends/Events`
 
-##how to extend
-For data plugins: as long as the data has texts and timestamp, we can analyze the sentiment using our framework. DataPlugins should provide list of Content class which contains texts, timestamps.
+#### Extensibility
+For data plugins 
+- As long as data has `text` and `timestamp`, the framework can analyze its sentiment context. 
 
-For Visualization plugins: our framework offers scores and timestamps for charts, therefore, any chart can use there two elements to draw different charts.
+For Visualization plugins
+- No specific restrictions. Available plugins can be added to our framework if they can be correctly rendered via HandleBar.js.
 
-Our framework would utilize the text from data plugins, analyze the sentiment and calculate the scores. Return scores and timestamps to visualization plugins, then visualization plugins can draw different charts as they want.
+### How to start
+
+Before running this framework, you need to set Environment Path for google NLP API:
+````shell
+export GOOGLE_APPLICATION_CREDENTIALS=${PROJ_PATH}/${CREDENTIALS_JSON_FILE}
+````
+
+It is better to use the absolute path for `PROJ_PATH`, which is the absolute path of `framework-xxxx.json (in this project)` file.
+
+If there is an error occurs like :
+```
+java.io.IOException: 
+The Application Default Credentials are not available. 
+They are available if running in Google Compute Engine. Otherwise, the environment variable GOOGLE_APPLICATION_CREDENTIALS must be defined pointing to a file defining the credentials.
+```
+Try the above `export` command in terminal instead of modifying the configuration of IntelliJ.
+
+After successfully setting `GOOGLE_APPLICATION_CREDENTIALS` environment path, run the framework:
+<br>
+````
+mvn site && mvn exec:exec
+````
+Then you can check the app locally on the specified port.
+
+#### Things need to pay attention:
+- You must choose at least one type chart to visualize your data, or it will not display the sentiment score.
+- When choosing time period, the `From`date should be earlier than `To` date, or it will show the error message "Please provide a valid date range." But this won't crash our framework.
+- If `To` date is greater than current date, the framework sets `To` date as current date automatically.
+- You can choose multiple charts to display the sentiment scores.
